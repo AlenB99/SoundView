@@ -1,0 +1,70 @@
+Title,Description,Issue ID,URL,State,Author,Author Username,Assignee,Assignee Username,Confidential,Locked,Due Date,Created At (UTC),Updated At (UTC),Closed At (UTC),Milestone,Weight,Labels,Time Estimate,Time Spent
+AI Image Generation,"## User Story
+
+As a user, 
+
+I want to scan a song
+
+So that I can receive an AI-generated image based on the song's context
+
+## Description
+
+The user should be able to scan a song with the app and automatically receive an AI-generated image based on the song's text.",1,https://student.inso.tuwien.ac.at/mobile-app-software-engineering/ws22/track-a-team-09-android/-/issues/1,Open,Vlad Popescu-Vifor,11709668,"","",No,No,,2022-11-15 20:50:09,2022-11-16 12:36:16,,Abgabe 3,,User Story,0,0
+History of images used with corresponding keywords,"As a user,
+
+I want to have access to an image history
+
+So that I can view images that have been generated earlier.
+
+## Description
+
+The user should be able to view a history of the images that have been generated earlier based on the keywords entered.",2,https://student.inso.tuwien.ac.at/mobile-app-software-engineering/ws22/track-a-team-09-android/-/issues/2,Open,Vlad Popescu-Vifor,11709668,"","",No,No,,2022-11-15 20:50:43,2022-11-16 14:48:36,,Abgabe 3,,User Story,0,0
+Music recognition,"As a user,
+
+I want to scan a song
+
+So that I can find out how it is called.
+
+## Description
+The app should be able to temporarily record songs, process the information using the ShazamSDK and find out the name and other details of the song.",3,https://student.inso.tuwien.ac.at/mobile-app-software-engineering/ws22/track-a-team-09-android/-/issues/3,Open,Vlad Popescu-Vifor,11709668,Vlad Popescu-Vifor,11709668,No,No,,2022-11-15 20:51:02,2022-11-16 15:14:37,,Abgabe 2,,User Story,0,0
+Lyrics display and editing of keywords,"As a user,
+
+I want to scan a song
+
+So that I can view its lyrics and be able to edit the keywords for the AI image generation
+
+## Description
+The app should send the name of the song obtained from the ShazamSDK to the lyrics.ovh API, so that the lyrics can be retrieved. The lyrics should then be displayed and the user should be able to edit the keywords created through NLP.",4,https://student.inso.tuwien.ac.at/mobile-app-software-engineering/ws22/track-a-team-09-android/-/issues/4,Open,Vlad Popescu-Vifor,11709668,"","",No,No,,2022-11-15 20:51:37,2022-11-16 15:17:08,,Abgabe 2,,User Story,0,0
+User can enter song manually,"As a user,
+
+I want to enter a song name manually
+
+So that I can receive the lyrics and AI-generated image for this specific song.
+
+## Description
+
+The user will be able to enter a song name manually for it to be processed by NLP and afterwards be used for the image generation.",5,https://student.inso.tuwien.ac.at/mobile-app-software-engineering/ws22/track-a-team-09-android/-/issues/5,Open,Vlad Popescu-Vifor,11709668,"","",No,No,,2022-11-15 20:52:02,2022-11-16 15:18:07,,Abgabe 2,,User Story,0,0
+History of scanned songs,"As a user,
+
+I want to see a scanned song history
+
+So that I can re-trigger the AI image generation for older songs.
+
+## Description
+The user will have access to a list containing the history of scanned songs and re-trigger the AI image generation process when selecting the older songs on the list.",6,https://student.inso.tuwien.ac.at/mobile-app-software-engineering/ws22/track-a-team-09-android/-/issues/6,Open,Vlad Popescu-Vifor,11709668,"","",No,No,,2022-11-15 20:52:20,2022-11-16 15:19:04,,Abgabe 2,,User Story,0,0
+Saving images to storage,"As a user,
+
+I want to be able to save the AI-generated image
+
+So that I can view it on the mobile storage.
+
+## Description
+The user will be able to save the generated images to the mobile storage, if they want to.",7,https://student.inso.tuwien.ac.at/mobile-app-software-engineering/ws22/track-a-team-09-android/-/issues/7,Open,Vlad Popescu-Vifor,11709668,"","",No,No,,2022-11-15 20:52:48,2022-11-16 15:20:32,,Abgabe 3,,User Story,0,0
+NLP statistics on the lyrics,"As a user,
+
+I want to be able to view the results of the NLP on the text
+
+So that I can have a statistical overview on the words.
+
+## Description
+The user should have an overview of the NLP results acquired from analyzing the song's lyrics.",8,https://student.inso.tuwien.ac.at/mobile-app-software-engineering/ws22/track-a-team-09-android/-/issues/8,Open,Vlad Popescu-Vifor,11709668,"","",No,No,,2022-11-16 13:52:17,2022-11-16 15:24:55,,Abgabe 3,,User Story,0,0
