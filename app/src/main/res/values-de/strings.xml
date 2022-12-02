@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">INSO - Beste Freunde</string>
+    <string name="navigate_back">Zurück navigieren</string>
+    <string name="refresh">Aktualisieren</string>
+    <string name="delete">Löschen</string>
+    <string name="msg_no_friends">Keine Freunde vorhanden!</string>
+    <string name="add_friend">Freund hinzufügen</string>
+    <string name="friend_name">Name</string>
+    <string name="friend_score">Freundesskala: %1$d</string>
+    <string name="friend_score_caption">Freundesskala</string>
+    <string name="save">Speichern</string>
+    <string name="friend_updated">Freund aktualisiert</string>
+    <string name="friend_added">Freund erstellt</string>
+    <string name="friend_error_name_empty">Name muss gesetzt sein</string>
+
+    <string name="friend_list_title">Beste Freunde</string>
+    <string name="friend_detail_title_new">Neuer Freund</string>
+    <string name="friend_detail_title_edit">Freund aktualisieren</string>
+</resources>

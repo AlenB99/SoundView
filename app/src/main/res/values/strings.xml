@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">INSO - Best Friends</string>
+    <string name="navigate_back">Navigate back</string>
+    <string name="refresh">Refresh</string>
+    <string name="delete">Delete</string>
+    <string name="msg_no_friends">No friends added!</string>
+    <string name="add_friend">Add friend</string>
+    <string name="friend_name">Name</string>
+    <string name="friend_score">Best friend score: %1$d</string>
+    <string name="friend_score_caption">Best friend score</string>
+    <string name="save">Save</string>
+    <string name="friend_updated">Friend updated</string>
+    <string name="friend_added">Friend added</string>
+    <string name="friend_error_name_empty">Name must be set</string>
+
+    <string name="friend_list_title">Best friends</string>
+    <string name="friend_detail_title_new">New friend</string>
+    <string name="friend_detail_title_edit">Edit friend</string>
+</resources>
