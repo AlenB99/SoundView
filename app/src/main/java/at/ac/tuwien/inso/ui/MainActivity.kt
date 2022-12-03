@@ -3,12 +3,18 @@ package at.ac.tuwien.inso.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.ExperimentalComposeUiApi
-import at.ac.tuwien.inso.ui.navigation.FriendNavigation
+import androidx.fragment.app.FragmentManager
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI.setupWithNavController
+import at.ac.tuwien.inso.R
 import at.ac.tuwien.inso.ui.theme.AndroidArchitectureExampleTheme
-import at.ac.tuwien.inso.ui.viewmodel.FriendViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 /**
@@ -18,26 +24,19 @@ import org.koin.androidx.viewmodel.ext.android.getViewModel
  * This class handles the theming of the Application,
  * and defines the entry point for the UI.
  */
-@ExperimentalComposeUiApi
-class MainActivity : ComponentActivity() {
-
+class MainActivity : AppCompatActivity() {
+    private lateinit var navController: NavController;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
+        setContentView(R.layout.activity_main)
 
-            // Inject the ViewModel with koin
-            val viewModel = getViewModel<FriendViewModel>()
+        val navHostFragment =  supportFragmentManager
+            .findFragmentById(R.id.fragment_main) as NavHostFragment
+        navController = navHostFragment.navController
+        //TODO Setup Bottom Navigation
+        //val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bot)
+        //setupWithNavController();
 
-            // This sets the correct theming for the Application
-            AndroidArchitectureExampleTheme {
 
-                // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-
-                    // The navigation host will handle the currently shown screen
-                    FriendNavigation(viewModel)
-                }
-            }
-        }
     }
 }

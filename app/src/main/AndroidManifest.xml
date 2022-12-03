@@ -9,12 +9,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_best_friends_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AndroidArchitectureExample">
+        android:theme="@style/Theme.AppCompat">
 
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.AndroidArchitectureExample">
+            android:theme="@style/Theme.AppCompat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

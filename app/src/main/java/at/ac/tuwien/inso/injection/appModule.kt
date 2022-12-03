@@ -4,7 +4,6 @@ import androidx.room.Room
 import at.ac.tuwien.inso.App
 import at.ac.tuwien.inso.persistence.database.AppDatabase
 import at.ac.tuwien.inso.repository.FriendRepository
-import at.ac.tuwien.inso.ui.viewmodel.FriendViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -37,5 +36,5 @@ val appModule = module {
     single { FriendRepository(get()) }
 
     // Provide the MainViewModel
-    viewModel { FriendViewModel(get()) }
+    //viewModel { FriendViewModel(get()) }
 }
