@@ -1,41 +1,38 @@
 package at.ac.tuwien.inso.repository
 
-import at.ac.tuwien.inso.api.getFriendsFromApi
-import at.ac.tuwien.inso.api.removeFriend
-import at.ac.tuwien.inso.api.uploadFriend
-import at.ac.tuwien.inso.model.Friend
+import at.ac.tuwien.inso.model.Song
 import at.ac.tuwien.inso.persistence.database.dao.FriendDao
 import kotlinx.coroutines.flow.Flow
 import java.lang.Exception
 
 /**
- * A Repository for [Friend] related data.
+ * A Repository for [Song] related data.
  *
  * This acts as an abstraction layer to access API and database.
  */
 class FriendRepository(
-    private val friendDao: FriendDao
+    private val songDao: FriendDao
 ) {
 
     /**
      * Returns a [Flow] for the list of friends.
      * If the data in the database changes, the flow gets re-triggered.
      */
-    fun getFriends(): Flow<List<Friend>> = friendDao.getFriends()
+    fun getFriends(): Flow<List<Song>> = songDao.getFriends()
 
     /**
      * Creates a new [Friend].
      */
-    suspend fun insert(friend: Friend): Boolean {
+    suspend fun insert(song: Song): Boolean {
         // Initially add it to the database, so no refresh is needed
-        friendDao.insert(friend)
+        songDao.insert(song)
         return try {
             // Upload the friend through the API
-            uploadFriend(friend)
+            // uploadFriend(song)
             true
         } catch (ex: Exception) {
             // If the API call fails, remove it again from the database
-            friendDao.delete(friend)
+            songDao.delete(song)
             false
         }
     }
@@ -43,29 +40,31 @@ class FriendRepository(
     /**
      * Deletes the given [Friend].
      */
-    suspend fun delete(friend: Friend): Boolean {
+    suspend fun delete(song: Song): Boolean {
         // Initially remove it from the database, so no refresh is needed
-        friendDao.delete(friend)
+        songDao.delete(song)
         return try {
             // Tell the backend to delete the friend
-            removeFriend(friend)
+            // removeFriend(song)
             true
         } catch (ex: Exception) {
             // If the API call fails, add it again from the database
-            friendDao.insert(friend)
+            songDao.insert(song)
             false
         }
     }
 
     /**
-     * Calls the fake API and inserts the result to the Room database.
+     * Calls the DALLE API and inserts the result to the Room database.
      */
-    suspend fun refreshFriends() {
+    suspend fun generateCover() {
+        //TODO: ADD API Call
+
         // Structured Concurrency: two asynchronous (suspend) function calls
         // with return values and Exception handling implemented in a structured
         // and easy to read format.
-        val apiFriends = getFriendsFromApi()
-        friendDao.deleteAll()
-        friendDao.insert(*apiFriends.toTypedArray())
+        //val apiCovers = getFriendsFromApi()
+        songDao.deleteAll()
+        //songDao.insert(*apiCovers.toTypedArray())
     }
 }

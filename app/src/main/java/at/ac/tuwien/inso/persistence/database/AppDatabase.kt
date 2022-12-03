@@ -2,7 +2,7 @@ package at.ac.tuwien.inso.persistence.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import at.ac.tuwien.inso.model.Friend
+import at.ac.tuwien.inso.model.Song
 import at.ac.tuwien.inso.persistence.database.dao.FriendDao
 
 /**
@@ -20,7 +20,7 @@ import at.ac.tuwien.inso.persistence.database.dao.FriendDao
  */
 @Database(
     entities = [
-        Friend::class
+        Song::class
     ],
     version = 1
 )

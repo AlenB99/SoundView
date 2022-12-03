@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "66e4c7ca044248f500c6f66bf6761f5d",
+    "identityHash": "8bd3173759709c603cbe29c39bab4565",
     "entities": [
       {
-        "tableName": "friends",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `score` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "tableName": "songs",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `score` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -21,9 +21,9 @@
             "notNull": true
           },
           {
-            "fieldPath": "score",
+            "fieldPath": "artist",
             "columnName": "score",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -40,7 +40,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '66e4c7ca044248f500c6f66bf6761f5d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8bd3173759709c603cbe29c39bab4565')"
     ]
   }
 }

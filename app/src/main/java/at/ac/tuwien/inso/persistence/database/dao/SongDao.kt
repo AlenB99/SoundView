@@ -5,12 +5,12 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import at.ac.tuwien.inso.model.Friend
-import at.ac.tuwien.inso.model.TABLE_NAME_FRIEND
+import at.ac.tuwien.inso.model.Song
+import at.ac.tuwien.inso.model.TABLE_NAME_SONG
 import kotlinx.coroutines.flow.Flow
 
 /**
- * The Data Access Object for [Friend].
+ * The Data Access Object for [Song].
  *
  * This class is abstract as the Room Framework will extend and generate the
  * respective functions and SQL queries.
@@ -25,36 +25,36 @@ import kotlinx.coroutines.flow.Flow
 interface FriendDao {
 
     /**
-     * Get all [Friend] from the database.
+     * Get all [Song] from the database.
      *
-     * @return A [Flow] with a list of all friends in the database.
+     * @return A [Flow] with a list of all Songs in the database.
      */
     @Query(
         """
         SELECT *
-        FROM $TABLE_NAME_FRIEND
+        FROM $TABLE_NAME_SONG
     """
     )
-    fun getFriends(): Flow<List<Friend>>
+    fun getFriends(): Flow<List<Song>>
 
     /**
-     * Inserts the given [Friend] to the database.
+     * Inserts the given [Song] to the database.
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(vararg friends: Friend)
+    suspend fun insert(vararg songs: Song)
 
     /**
-     * Removes the given [Friend] from the database.
+     * Removes the given [Song] from the database.
      */
     @Delete
-    suspend fun delete(vararg friend: Friend)
+    suspend fun delete(vararg song: Song)
 
     /**
-     * Removes all [Friend]s from the database.
+     * Removes all [Song]s from the database.
      */
     @Query(
         """
-        DELETE FROM $TABLE_NAME_FRIEND
+        DELETE FROM $TABLE_NAME_SONG
     """
     )
     suspend fun deleteAll()
