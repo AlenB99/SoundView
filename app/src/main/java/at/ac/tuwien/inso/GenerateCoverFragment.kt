@@ -19,6 +19,7 @@ import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.squareup.picasso.Picasso
 
+
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
@@ -38,16 +39,27 @@ class GenerateCoverFragment : Fragment(R.layout.fragment_generate_cover) {
             Python.start(AndroidPlatform(view.context))
         }
         val py = Python.getInstance()
-        val module = py.getModule("plot")
+        val module = py.getModule("image_generate")
 
         view.findViewById<Button>(R.id.btn_generate).setOnClickListener {
             try {
-                val url = module.callAttr("plot",
-                    view.findViewById<EditText>(R.id.editText_prompt).text.toString(),
-                    view.findViewById<EditText>(R.id.editText_prompt).text.toString())
-                    .toString()
+                val url = module.callAttr("image_generate",
+                    view.findViewById<EditText>(R.id.editText_prompt).text.toString()).toString()
+
                 val imageView = view.findViewById<View>(R.id.imageView) as ImageView
-                Picasso.get().load(url).into(imageView)
+                val imageView2 = view.findViewById<View>(R.id.imageView2) as ImageView
+                var urlList: List<String> = url.split(",").map { it.trim() }
+
+                // From python script we get a PyObject, which is converted to a string. Afterwards
+                // its added to urlList, so that we can select the urls through indexing
+                Picasso.get().load(urlList[0].toString().drop(2).dropLast(1)).into(imageView)
+                println(urlList)
+                Thread.sleep(2_000)
+                // Second Picasso image creation is not working, maybe because it's being skipped?
+                Picasso.get().load(urlList[1].toString().drop(2).dropLast(1)).into(imageView2)
+
+
+
                 view.findFocus()?.let {
                     (view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
                         .hideSoftInputFromWindow(it.windowToken, 0)
