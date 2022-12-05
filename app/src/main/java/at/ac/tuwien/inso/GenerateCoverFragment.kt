@@ -11,64 +11,38 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import at.ac.tuwien.inso.R
+import at.ac.tuwien.inso.databinding.FragmentGenerateCoverBinding
+import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
 import com.chaquo.python.PyException
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.squareup.picasso.Picasso
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [GenerateCoverFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-
 class GenerateCoverFragment : Fragment(R.layout.fragment_generate_cover) {
 
+    private val sharedViewModel: GenerateCoverViewModel by activityViewModels()
+    private var _binding: FragmentGenerateCoverBinding? = null
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_generate_cover, container, false)
-        if (!Python.isStarted()) {
-            Python.start(AndroidPlatform(view.context))
+        _binding = FragmentGenerateCoverBinding.inflate(inflater, container, false)
+
+
+       binding.btnGenerate.setOnClickListener {
+            sharedViewModel.setPrompt(binding.editTextPrompt.text.toString())
+           findNavController().navigate(R.id.action_generateCoverFragment_to_imageChooser)
         }
-        val py = Python.getInstance()
-        val module = py.getModule("image_generate")
+        return binding.root;
+    }
 
-        view.findViewById<Button>(R.id.btn_generate).setOnClickListener {
-            try {
-                val url = module.callAttr("image_generate",
-                    view.findViewById<EditText>(R.id.editText_prompt).text.toString()).toString()
-
-                val imageView = view.findViewById<View>(R.id.imageView) as ImageView
-                val imageView2 = view.findViewById<View>(R.id.imageView2) as ImageView
-                var urlList: List<String> = url.split(",").map { it.trim() }
-
-                // From python script we get a PyObject, which is converted to a string. Afterwards
-                // its added to urlList, so that we can select the urls through indexing
-                Picasso.get().load(urlList[0].toString().drop(2).dropLast(1)).into(imageView)
-                println(urlList)
-                Thread.sleep(2_000)
-                // Second Picasso image creation is not working, maybe because it's being skipped?
-                Picasso.get().load(urlList[1].toString().drop(2).dropLast(1)).into(imageView2)
-
-
-
-                view.findFocus()?.let {
-                    (view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-                        .hideSoftInputFromWindow(it.windowToken, 0)
-                }
-            } catch (e: PyException) {
-                println(e.message + " ")
-                Toast.makeText(view.context, e.message, Toast.LENGTH_LONG).show()
-            }
-        }
-        return view;
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

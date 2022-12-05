@@ -12,6 +12,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
+import androidx.navigation.ui.setupActionBarWithNavController
 import at.ac.tuwien.inso.R
 import at.ac.tuwien.inso.ui.theme.AndroidArchitectureExampleTheme
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -35,7 +36,6 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
         //TODO Setup Bottom Navigation
         //val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bot)
-        //setupWithNavController();
 
 
     }

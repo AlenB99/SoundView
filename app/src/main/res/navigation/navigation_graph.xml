@@ -9,5 +9,14 @@
         android:id="@+id/generateCoverFragment"
         android:name="at.ac.tuwien.inso.GenerateCoverFragment"
         android:label="fragment_generate_cover"
-        tools:layout="@layout/fragment_generate_cover" />
+        tools:layout="@layout/fragment_generate_cover" >
+        <action
+            android:id="@+id/action_generateCoverFragment_to_imageChooser"
+            app:destination="@id/imageChooser" />
+    </fragment>
+    <fragment
+        android:id="@+id/imageChooser"
+        android:name="at.ac.tuwien.inso.ImageChooser"
+        android:label="fragment_image_chooser"
+        tools:layout="@layout/fragment_image_chooser" />
 </navigation>
