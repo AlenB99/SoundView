@@ -1,4 +1,8 @@
 ### Android ###
+
+*.DS_Store
+
+
 # Gradle files
 .gradle/
 build/
