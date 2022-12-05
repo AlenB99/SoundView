@@ -1,22 +1,18 @@
 package at.ac.tuwien.inso.ui
 
+
+import android.widget.Toast
+import android.media.Image
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
+import android.os.Environment
+import android.view.View
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.NavigationUI.setupWithNavController
-import androidx.navigation.ui.setupActionBarWithNavController
+import at.ac.tuwien.inso.ImageChooser
 import at.ac.tuwien.inso.R
-import at.ac.tuwien.inso.ui.theme.AndroidArchitectureExampleTheme
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import org.koin.androidx.viewmodel.ext.android.getViewModel
+import java.io.File
 
 /**
  * This is the central point for the UI of the Application.
@@ -37,6 +33,28 @@ class MainActivity : AppCompatActivity() {
         //TODO Setup Bottom Navigation
         //val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bot)
 
+        setContentView(R.layout.fragment_image_chooser)
+        val clickme = findViewById<Button>(R.id.downloadButton)
+        clickme.setOnClickListener{
+            Toast.makeText(this,"Button Clicked", Toast.LENGTH_SHORT).show()
+
+        }
 
     }
+    public fun saveImageToStorage(filename: String, imageObject: Image ): File? {
+        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val image = File.createTempFile(filename, ".jpg", storageDir)
+        val photoPath = image.absolutePath
+        return image
+    }
+
+
+
 }
+
+
+
+
+
+
+

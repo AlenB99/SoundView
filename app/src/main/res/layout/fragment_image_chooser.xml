@@ -117,7 +117,7 @@
             android:layout_height="53dp" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/downloadButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Choose one to Download" />
