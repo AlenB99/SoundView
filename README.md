@@ -8,13 +8,18 @@
 
 ## Preamble & Disclaimer
 
-This **Android Architecture Example** is provided by researchers from [INSO](https://www.inso.tuwien.ac.at/) & [DECO](https://deco.inso.tuwien.ac.at/) to illustrate a possible draft for a basic Android architecture. The goal of this project is to give an overview to important concepts of the Android SDK and its related components. Software architectures differ, are constantly evolving and always depend on the context and requirements of a software. Therefore, this projects can only be seen as proposal to build upon and does **not** aspire to be complete nor perfect.
+This **Android Application** is provided by Alen Bisanovic and Vlad Popescu-Vifor. The goal of this project is to create an innovative app by applying important concepts of the Android SDK and its related components in combination with several API's. 
 
-## Focus and Context
 
-This Android project was implemented as a basis for a live coding session at the [Technische Universität Wien](https://www.tuwien.at/en/) in [183.661 Mobile (App) Software Engineering](https://tiss.tuwien.ac.at/course/educationDetails.xhtml?dswid=2813&dsrid=201&courseNr=183661). Two live coding sessions use this project as a basis: Architecture & UI. Focus lies on introducing the following concepts:
+## Project Overview & Architecture
 
-Architecture: 
+The main goal of our app is generating an AI illustration that would match the lyrics of a song [(User Story 1)](https://student.inso.tuwien.ac.at/mobile-app-software-engineering/ws22/track-a-team-09-android/-/issues/1).
+Our concept of the app would be having the phone listen to a song, obtain its name using ShazamSDK [(User Story 3)](https://student.inso.tuwien.ac.at/mobile-app-software-engineering/ws22/track-a-team-09-android/-/issues/3), then use the name to obtain the lyrics of the song using a lyrics API. Afterwards, NLP would be applied on the lyrics for the most important words found in the text. These words would then be entered into the Stable-Diffusion API, which will generate an AI image based on those words. 
+Additionally, the user will also be able to view a history of the generated images [(User Story 2)](https://student.inso.tuwien.ac.at/mobile-app-software-engineering/ws22/track-a-team-09-android/-/issues/2) and save them to the local storage of the mobile phone [User Story 7](https://student.inso.tuwien.ac.at/mobile-app-software-engineering/ws22/track-a-team-09-android/-/issues/7). Another important feature is manually entering a song name [(User Story 5)](https://student.inso.tuwien.ac.at/mobile-app-software-engineering/ws22/track-a-team-09-android/-/issues/5) and viewing its lyrics [(User Story 4)](https://student.inso.tuwien.ac.at/mobile-app-software-engineering/ws22/track-a-team-09-android/-/issues/4), as well as NLP statistics based on the text [(User Story 8)](https://student.inso.tuwien.ac.at/mobile-app-software-engineering/ws22/track-a-team-09-android/-/issues/8). A history of the previous scanned songs would also be available for the user to re-select [(User Story 6)](https://student.inso.tuwien.ac.at/mobile-app-software-engineering/ws22/track-a-team-09-android/-/issues/6). 
+![MSE](uploads/4a3af3bc7beeb1738f0ba9bbe45e97f4/MSE.png)
+
+
+### Architecture: 
 
 * [Android Studio](https://developer.android.com/studio/)
 * [Android Resources and Localization](https://developer.android.com/guide/topics/resources/providing-resources)
@@ -25,68 +30,27 @@ Architecture:
 * [Structured Concurrency with Kotlin Coroutines](https://developer.android.com/kotlin/coroutines)
 * [ViewModels](https://developer.android.com/topic/libraries/architecture/viewmodel), Android Lifecycle and [Reactive Programming](https://en.wikipedia.org/wiki/Reactive_programming).
 
-UI
+### UI
 * [Jetpack Compose](https://developer.android.com/jetpack/compose/documentation)
 * User Interface Design
 * Resources (Strings, Images, Icons)
 
-## Project Overview & Architecture
+### Dataflow within the application !
 
-The project uses `Friend` as a Model to illustrate on how to access the database and an API. The focus lies on the architecture and how these different asynchronous operations can be combined within a [Repository Pattern](https://developer.android.com/jetpack/guide#overview).
 
-Friends are "downloaded" from a fake server and then saved to the database which triggers a stream of data to update the user interface.
-
-### Dataflow within the application
 
 <br />
 
-![Dataflow within the application](doc/data_flow.png)
 
-<br />
 
-### Repository Pattern with respective Classes
 
-<br />
-
-![Repository Pattern with respective Classes](doc/android-architecture.png)
-
-<br />
-
-### Screenshot
-
-<br />
-
-<img src="doc/app-screenshot.png" width="50%" height="50%" style="display: block; margin: 0 auto"/>
-
-<br />
-<br />
-
-## Further Resources for Android Developers
-
-* [KtLint](https://github.com/pinterest/ktlint) – Lint Checker to write properly formatted code
-* Bug Tracking with e.g. [Sentry](https://sentry.io/welcome/)
-* Continuous Localization with e.g. [Weblate](https://weblate.org/en/)
-* [Retrofit](https://square.github.io/retrofit/) – A type-safe HTTP client for Android.
-* [Glide](https://github.com/bumptech/glide) – a fast and efficient open source media management and image loading framework for Android
-* [Robolectric](http://robolectric.org/androidx_test/) for testing android applications
-* Network interception tools for debugging and testing e.g. [mitmproxy](https://mitmproxy.org/) or [Proxyman](https://proxyman.io/)
-* [Material Design resources](https://material.io/) such as [theming](https://material.io/design/guidelines-overview) or [icons](https://fonts.google.com/icons?selected=Material+Icons)
-* Use [Scrcpy](https://github.com/Genymobile/scrcpy) to mirror and control your Android device from a desktop computer
-* [Hilt](https://developer.android.com/training/dependency-injection/hilt-android) – another dependency injection framework by Google
-* [Firebase Cloud-Messaging](https://firebase.google.com/docs/cloud-messaging/)
-* Finding memory leaks with [LeakCanary](https://github.com/square/leakcanary)
-* [Android Arsenal](https://android-arsenal.com/) - Search base for Android libraries
-* Improved logging with [Timber](https://github.com/JakeWharton/timber)
+### Screenshot !
+Add screenshot
 
 ## Authors in Alphabetic Order
 
-* Christian Schuhmacher
-* Clemens Kößler
-* Gabriel Sperrer
-* [Paul Spiesberger](https://spiesberger.eu/)
-* [Michael Wapp](https://michaelwapp.com/)  
-* Richard Schlögl
-* Stefan Bachl
+* Alen Bisanovic 
+* Vlad Popescu-Vifor
 
 <br />
 
