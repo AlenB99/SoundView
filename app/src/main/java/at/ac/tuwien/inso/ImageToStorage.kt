@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
@@ -19,6 +20,7 @@ import com.squareup.picasso.Picasso.LoadedFrom
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.util.Date
 
 
 /**
@@ -54,10 +56,13 @@ class ImageToStorage : Fragment() {
         }
 
         binding.downloadButton.setOnClickListener {
-            Picasso.get().load("https://example.com/image.png").into(object : com.squareup.picasso.Target {
+            Picasso.get().load(sharedViewModel.imageurl.value).into(object : com.squareup.picasso.Target {
                 override fun onBitmapLoaded(bitmap: Bitmap, from: LoadedFrom?) {
                     // Save the bitmap to a file
-                    val file: File = File(view.context.cacheDir, "image.png")
+
+                    val file = File(view.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                        , sharedViewModel.prompt.value+ "_" + Date() +  ".png")
+                    println(file.absoluteFile.toString())
                     try {
                         file.createNewFile()
                         val ostream = FileOutputStream(file)
