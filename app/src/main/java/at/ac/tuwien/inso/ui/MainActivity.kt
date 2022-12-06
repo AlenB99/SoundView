@@ -33,20 +33,20 @@ class MainActivity : AppCompatActivity() {
         //TODO Setup Bottom Navigation
         //val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bot)
 
-        setContentView(R.layout.fragment_image_chooser)
-        val clickme = findViewById<Button>(R.id.downloadButton)
+        setContentView(R.layout.fragment_generate_cover)
+        /*val clickme = findViewById<Button>(R.id.downloadButton)
         clickme.setOnClickListener{
             Toast.makeText(this,"Button Clicked", Toast.LENGTH_SHORT).show()
 
-        }
+        }*/
 
     }
-    public fun saveImageToStorage(filename: String, imageObject: Image ): File? {
+    /*public fun saveImageToStorage(filename: String, imageObject: Image ): File? {
         val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         val image = File.createTempFile(filename, ".jpg", storageDir)
         val photoPath = image.absolutePath
         return image
-    }
+    }*/
 
 
 

@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import at.ac.tuwien.inso.databinding.FragmentImageChooserBinding
 import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
 import com.chaquo.python.PyException
@@ -60,7 +61,7 @@ class ImageChooser : Fragment() {
             val urlList: List<String> = url.split(",").map { it.trim()
                 .replace("[","").replace("]","")
                 .replace("'","") }
-
+            sharedViewModel.setImageurls(urlList)
             // From python script we get a PyObject, which is converted to a string. Afterwards
             // its added to urlList, so that we can select the urls through indexing
             val uiHandler = Handler(Looper.getMainLooper())
@@ -82,6 +83,10 @@ class ImageChooser : Fragment() {
         }
 
         }.start()
+        binding.imageView5.setOnClickListener {
+            sharedViewModel.setImageurl(0)
+            findNavController().navigate(R.id.action_imageChooser_to_imageToStorage)
+        }
         return binding.root;
     }
 

@@ -32,10 +32,8 @@ class GenerateCoverFragment : Fragment(R.layout.fragment_generate_cover) {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentGenerateCoverBinding.inflate(inflater, container, false)
-
-
        binding.btnGenerate.setOnClickListener {
-            sharedViewModel.setPrompt(binding.editTextPrompt.text.toString())
+           sharedViewModel.setPrompt(binding.editTextPrompt.text.toString())
            findNavController().navigate(R.id.action_generateCoverFragment_to_imageChooser)
         }
         return binding.root;

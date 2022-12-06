@@ -18,5 +18,14 @@
         android:id="@+id/imageChooser"
         android:name="at.ac.tuwien.inso.ImageChooser"
         android:label="fragment_image_chooser"
-        tools:layout="@layout/fragment_image_chooser" />
+        tools:layout="@layout/fragment_image_chooser" >
+        <action
+            android:id="@+id/action_imageChooser_to_imageToStorage"
+            app:destination="@id/imageToStorage" />
+    </fragment>
+    <fragment
+        android:id="@+id/imageToStorage"
+        android:name="at.ac.tuwien.inso.ImageToStorage"
+        android:label="fragment_image_to_storage"
+        tools:layout="@layout/fragment_image_to_storage" />
 </navigation>
