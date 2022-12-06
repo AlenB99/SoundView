@@ -1,0 +1,93 @@
+package at.ac.tuwien.inso
+
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import at.ac.tuwien.inso.databinding.FragmentImageToStorageBinding
+import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.Picasso.LoadedFrom
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+
+
+/**
+ * A simple [Fragment] subclass.
+ * Use the [ImageToStorage.newInstance] factory method to
+ * create an instance of this fragment.
+ */
+class ImageToStorage : Fragment() {
+
+    private val sharedViewModel: GenerateCoverViewModel by activityViewModels()
+    private var _binding: FragmentImageToStorageBinding? = null
+
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentImageToStorageBinding.inflate(inflater, container, false)
+        val view = inflater.inflate(R.layout.fragment_image_to_storage, container, false)
+        println(sharedViewModel.prompt.value.toString())
+        val imageView = binding.imageView3
+
+        // From python script we get a PyObject, which is converted to a string. Afterwards
+        // its added to urlList, so that we can select the urls through indexing
+        val uiHandler = Handler(Looper.getMainLooper())
+        uiHandler.post {
+            Picasso.get().load(sharedViewModel.imageurl.value).into(imageView)
+        }
+
+        binding.downloadButton.setOnClickListener {
+            Picasso.get().load("https://example.com/image.png").into(object : com.squareup.picasso.Target {
+                override fun onBitmapLoaded(bitmap: Bitmap, from: LoadedFrom?) {
+                    // Save the bitmap to a file
+                    val file: File = File(view.context.cacheDir, "image.png")
+                    try {
+                        file.createNewFile()
+                        val ostream = FileOutputStream(file)
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream)
+                        ostream.close()
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+
+                override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
+                    // Handle failure
+                }
+
+                override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                    // Handle placeholder
+                }
+            })
+        }
+
+        view.findFocus()?.let {
+            (view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+                .hideSoftInputFromWindow(it.windowToken, 0)
+        }
+        return binding.root;
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+}
