@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/imageToStorage2"
-        android:name="at.ac.tuwien.inso.ImageToStorage"
+        android:name="at.ac.tuwien.inso.ImageToStorageFragment"
         android:label="fragment_image_to_storage"
         tools:layout="@layout/fragment_image_to_storage" />
 </navigation>
