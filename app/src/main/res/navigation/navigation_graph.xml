@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/imageChooser"
-        android:name="at.ac.tuwien.inso.ImageChooser"
+        android:name="at.ac.tuwien.inso.ImageChooserFragment"
         android:label="Select Image"
         tools:layout="@layout/fragment_image_chooser" >
         <action
