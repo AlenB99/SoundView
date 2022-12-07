@@ -1,20 +1,20 @@
 package at.ac.tuwien.inso
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import at.ac.tuwien.inso.databinding.ActivityMainBinding
 import at.ac.tuwien.inso.databinding.FragmentImageChooserBinding
 import at.ac.tuwien.inso.ui.MainActivity
 import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
@@ -42,60 +42,72 @@ class ImageChooser : Fragment() {
 
     private val sharedViewModel: GenerateCoverViewModel by activityViewModels()
     private var _binding: FragmentImageChooserBinding? = null
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         _binding = FragmentImageChooserBinding.inflate(inflater, container, false)
         val view = inflater.inflate(R.layout.fragment_generate_cover, container, false)
-        Thread{
-        if (!Python.isStarted()) {
-            Python.start(AndroidPlatform(view.context))
-        }
-
-        val backButton = binding.backButton
-        backButton.setOnClickListener{
-            val intent = Intent(view.context, MainActivity::class.java)
-            startActivity(intent)
-        }
-        val py = Python.getInstance()
-        val module = py.getModule("image_generate")
-        try {
-            println(sharedViewModel.prompt.value.toString())
-            val url = module.callAttr("image_generate", sharedViewModel.prompt.value.toString()).toString()
-
-
-            val imageView = binding.imageView5
-            val imageView2 = binding.imageView6
-            val imageView3 = binding.imageView7
-            val imageView4 = binding.imageView8
-            val urlList: List<String> = url.split(",").map { it.trim()
-                .replace("[","").replace("]","")
-                .replace("'","") }
-            sharedViewModel.setImageurls(urlList)
-            // From python script we get a PyObject, which is converted to a string. Afterwards
-            // its added to urlList, so that we can select the urls through indexing
-            val uiHandler = Handler(Looper.getMainLooper())
-            uiHandler.post {
-                Picasso.get().load(urlList[0]).into(imageView)
-                Picasso.get().load(urlList[1]).into(imageView2)
-                Picasso.get().load(urlList[2]).into(imageView3)
-                Picasso.get().load(urlList[3]).into(imageView4)
+        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        (activity as AppCompatActivity).supportActionBar?.title = "Select Image"
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
+        Thread {
+            if (!Python.isStarted()) {
+                Python.start(AndroidPlatform(view.context))
             }
 
-            val loadingIcon= binding.loadingIcon
-            loadingIcon.setVisibility(View.INVISIBLE)
-
-            view.findFocus()?.let {
-                (view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-                    .hideSoftInputFromWindow(it.windowToken, 0)
+            val backButton = binding.backButton
+            backButton.setOnClickListener {
+                val intent = Intent(view.context, MainActivity::class.java)
+                startActivity(intent)
             }
-        } catch (e: PyException) {
-            println(e.message + " ")
-            Toast.makeText(view.context, e.message, Toast.LENGTH_LONG).show()
-        }
+            val py = Python.getInstance()
+            val module = py.getModule("image_generate")
+            try {
+                println(sharedViewModel.prompt.value.toString())
+                val url = module.callAttr("image_generate", sharedViewModel.prompt.value.toString())
+                    .toString()
+
+
+                val imageView = binding.imageView5
+                val imageView2 = binding.imageView6
+                val imageView3 = binding.imageView7
+                val imageView4 = binding.imageView8
+                val urlList: List<String> = url.split(",").map {
+                    it.trim()
+                        .replace("[", "").replace("]", "")
+                        .replace("'", "")
+                }
+                sharedViewModel.setImageurls(urlList)
+                // From python script we get a PyObject, which is converted to a string. Afterwards
+                // its added to urlList, so that we can select the urls through indexing
+                val uiHandler = Handler(Looper.getMainLooper())
+                uiHandler.post {
+                    Picasso.get().load(urlList[0]).into(imageView)
+                    Picasso.get().load(urlList[1]).into(imageView2)
+                    Picasso.get().load(urlList[2]).into(imageView3)
+                    Picasso.get().load(urlList[3]).into(imageView4)
+                }
+
+                val loadingIcon = binding.loadingIcon
+                loadingIcon.setVisibility(View.INVISIBLE)
+
+                view.findFocus()?.let {
+                    (view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+                        .hideSoftInputFromWindow(it.windowToken, 0)
+                }
+            } catch (e: PyException) {
+                println(e.message + " ")
+                Toast.makeText(view.context, e.message, Toast.LENGTH_LONG).show()
+            }
 
         }.start()
 
@@ -126,8 +138,4 @@ class ImageChooser : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-    /*
-
-     */
 }
