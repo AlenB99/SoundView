@@ -46,6 +46,7 @@ class ImageChooser : Fragment() {
         if (!Python.isStarted()) {
             Python.start(AndroidPlatform(view.context))
         }
+
         val py = Python.getInstance()
         val module = py.getModule("image_generate")
         try {
@@ -71,6 +72,8 @@ class ImageChooser : Fragment() {
                 Picasso.get().load(urlList[3]).into(imageView4)
             }
 
+            val loadingIcon= binding.loadingIcon
+            loadingIcon.setVisibility(View.INVISIBLE)
 
             view.findFocus()?.let {
                 (view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
