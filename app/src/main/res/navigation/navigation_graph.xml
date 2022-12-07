@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/generateCoverFragment"
         android:name="at.ac.tuwien.inso.GenerateCoverFragment"
-        android:label="fragment_generate_cover"
+        android:label="Enter Prompt (DEBUG)"
         tools:layout="@layout/fragment_generate_cover" >
         <action
             android:id="@+id/action_generateCoverFragment_to_imageChooser"
@@ -17,7 +17,7 @@
     <fragment
         android:id="@+id/imageChooser"
         android:name="at.ac.tuwien.inso.ImageChooser"
-        android:label="fragment_image_chooser"
+        android:label="Select Image"
         tools:layout="@layout/fragment_image_chooser" >
         <action
             android:id="@+id/action_imageChooser_to_imageToStorage2"
@@ -26,6 +26,6 @@
     <fragment
         android:id="@+id/imageToStorage2"
         android:name="at.ac.tuwien.inso.ImageToStorageFragment"
-        android:label="fragment_image_to_storage"
+        android:label="Cover Art"
         tools:layout="@layout/fragment_image_to_storage" />
 </navigation>

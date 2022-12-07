@@ -13,7 +13,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupActionBarWithNavController
 import at.ac.tuwien.inso.databinding.FragmentImageChooserBinding
 import at.ac.tuwien.inso.ui.MainActivity
 import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
@@ -22,20 +25,10 @@ import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.squareup.picasso.Picasso
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ImageChooser.newInstance] factory method to
- * create an instance of this fragment.
- *
- */
 
 class ImageChooser : Fragment() {
-
+    private lateinit var navController: NavController
     private val sharedViewModel: GenerateCoverViewModel by activityViewModels()
     private var _binding: FragmentImageChooserBinding? = null
 
@@ -51,19 +44,13 @@ class ImageChooser : Fragment() {
         _binding = FragmentImageChooserBinding.inflate(inflater, container, false)
         val view = inflater.inflate(R.layout.fragment_generate_cover, container, false)
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
-        (activity as AppCompatActivity).supportActionBar?.title = "Select Image"
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
+        (activity as AppCompatActivity).setupActionBarWithNavController(findNavController())
+        (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.back_arrow)
         Thread {
             if (!Python.isStarted()) {
                 Python.start(AndroidPlatform(view.context))
             }
 
-            val backButton = binding.backButton
-            backButton.setOnClickListener {
-                val intent = Intent(view.context, MainActivity::class.java)
-                startActivity(intent)
-            }
             val py = Python.getInstance()
             val module = py.getModule("image_generate")
             try {
@@ -128,4 +115,6 @@ class ImageChooser : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+
 }

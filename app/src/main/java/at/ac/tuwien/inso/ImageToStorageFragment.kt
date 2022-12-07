@@ -15,6 +15,8 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupActionBarWithNavController
 import at.ac.tuwien.inso.databinding.FragmentImageToStorageBinding
 import at.ac.tuwien.inso.ui.MainActivity
 import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
@@ -24,6 +26,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.Date
+
 
 /**
  * A simple [Fragment] subclass.
@@ -39,6 +42,7 @@ class ImageToStorageFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,9 +53,8 @@ class ImageToStorageFragment : Fragment() {
         println(sharedViewModel.prompt.value.toString())
         val imageView = binding.imageView3
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
-        (activity as AppCompatActivity).supportActionBar?.title = "Cover Art"
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
+        (activity as AppCompatActivity).setupActionBarWithNavController(findNavController())
+        (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.back_arrow)
         // From python script we get a PyObject, which is converted to a string. Afterwards
         // its added to urlList, so that we can select the urls through indexing
         val uiHandler = Handler(Looper.getMainLooper())
@@ -64,7 +67,8 @@ class ImageToStorageFragment : Fragment() {
                 override fun onBitmapLoaded(bitmap: Bitmap, from: LoadedFrom?) {
                     // Save the bitmap to a file
 
-                    val file = File(view.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), sharedViewModel.prompt.value + "_" + Date() + ".png")
+                    val file = File(view.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                        , sharedViewModel.prompt.value+ "_" + Date() +  ".png")
                     (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
                     (activity as AppCompatActivity).supportActionBar?.title = "Cover Art"
                     (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -94,7 +98,7 @@ class ImageToStorageFragment : Fragment() {
             (view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
                 .hideSoftInputFromWindow(it.windowToken, 0)
         }
-        return binding.root
+        return binding.root;
     }
 
     override fun onDestroyView() {
@@ -109,7 +113,8 @@ class ImageToStorageFragment : Fragment() {
                 activity?.onBackPressed()
                 true
             }
-            else -> super.onOptionsItemSelected(item)
+            else              -> super.onOptionsItemSelected(item)
         }
     }
+
 }
