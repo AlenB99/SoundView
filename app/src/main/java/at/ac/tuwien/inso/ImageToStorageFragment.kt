@@ -25,10 +25,10 @@ import java.util.Date
 
 /**
  * A simple [Fragment] subclass.
- * Use the [ImageToStorage.newInstance] factory method to
+ * Use the [ImageToStorageFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ImageToStorage : Fragment() {
+class ImageToStorageFragment : Fragment() {
 
     private val sharedViewModel: GenerateCoverViewModel by activityViewModels()
     private var _binding: FragmentImageToStorageBinding? = null
