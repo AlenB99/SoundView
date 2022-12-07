@@ -1,6 +1,8 @@
 package at.ac.tuwien.inso
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,7 +14,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import at.ac.tuwien.inso.databinding.ActivityMainBinding
 import at.ac.tuwien.inso.databinding.FragmentImageChooserBinding
+import at.ac.tuwien.inso.ui.MainActivity
 import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
 import com.chaquo.python.PyException
 import com.chaquo.python.Python
@@ -31,6 +35,9 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  *
  */
+
+
+
 class ImageChooser : Fragment() {
 
     private val sharedViewModel: GenerateCoverViewModel by activityViewModels()
@@ -39,12 +46,20 @@ class ImageChooser : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentImageChooserBinding.inflate(inflater, container, false)
         val view = inflater.inflate(R.layout.fragment_generate_cover, container, false)
         Thread{
         if (!Python.isStarted()) {
             Python.start(AndroidPlatform(view.context))
+        }
+
+        val backButton = binding.backButton
+        backButton.setOnClickListener{
+            Toast.makeText(view.context, "You clicked me.", Toast.LENGTH_SHORT).show()
+            val intent = Intent(view.context, MainActivity::class.java)
+            startActivity(intent)
         }
         val py = Python.getInstance()
         val module = py.getModule("image_generate")
