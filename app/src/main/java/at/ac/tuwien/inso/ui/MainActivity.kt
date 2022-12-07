@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
                     .findFragmentById(R.id.fragment_main) as NavHostFragment
                 navController = navHostFragment.navController            } else {
                 // The storage permissions have not been granted, show an error message
-                Toast.makeText(this, "Unable to access storage. The app will not function properly.", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this, "Unable to access storage. The app will not function properly.", Toast.LENGTH_SHORT).show()
             }
         }
     }
