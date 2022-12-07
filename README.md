@@ -1,10 +1,15 @@
-# Android Architecture Example
-
+# SoundView
 ## Project Setup
 
 1. Clone
 1. Change Gradle's JDK Settings (if not already set as default): 
 `Preferences > Build, Execution, Deployment > BuildTools > Gradle > Gradle JDK > 11`
+
+## Instructions
+1. Enter text in the input field to send to the Dall-E API for Image generation
+2. Wait around 6-8 seconds for the images to load.
+3. Select an image, click download. 
+4. The image will be saved in the android/data/at.ac.tuwien.inso/files folder.
 
 ## Preamble & Disclaimer
 
@@ -35,17 +40,11 @@ Additionally, the user will also be able to view a history of the generated imag
 * User Interface Design
 * Resources (Strings, Images, Icons)
 
-### Dataflow within the application !
-
-
-
+### Dataflow within the application - coming soon
 <br />
 
+### Screenshots !
 
-
-
-### Screenshot !
-Add screenshot
 
 ## Authors in Alphabetic Order
 
@@ -58,29 +57,3 @@ Add screenshot
 
 <br />
 <br />
-
-## Licence
-
-```
-MIT License
-
-Copyright (c) 2022 INSO & DECO – https://www.inso.tuwien.ac.at/
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
