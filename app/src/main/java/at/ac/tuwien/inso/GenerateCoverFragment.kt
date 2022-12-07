@@ -1,26 +1,14 @@
 package at.ac.tuwien.inso
 
-import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import at.ac.tuwien.inso.R
 import at.ac.tuwien.inso.databinding.FragmentGenerateCoverBinding
 import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
-import com.chaquo.python.PyException
-import com.chaquo.python.Python
-import com.chaquo.python.android.AndroidPlatform
-import com.squareup.picasso.Picasso
 
 class GenerateCoverFragment : Fragment(R.layout.fragment_generate_cover) {
 
@@ -33,12 +21,11 @@ class GenerateCoverFragment : Fragment(R.layout.fragment_generate_cover) {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentGenerateCoverBinding.inflate(inflater, container, false)
 
-
-       binding.btnGenerate.setOnClickListener {
+        binding.btnGenerate.setOnClickListener {
             sharedViewModel.setPrompt(binding.editTextPrompt.text.toString())
-           findNavController().navigate(R.id.action_generateCoverFragment_to_imageChooser)
+            findNavController().navigate(R.id.action_generateCoverFragment_to_imageChooser)
         }
-        return binding.root;
+        return binding.root
     }
 
     override fun onDestroyView() {
