@@ -1,7 +1,6 @@
 package at.ac.tuwien.inso
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,20 +13,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import at.ac.tuwien.inso.databinding.FragmentImageChooserBinding
-import at.ac.tuwien.inso.ui.MainActivity
 import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
 import com.chaquo.python.PyException
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.squareup.picasso.Picasso
 
-
-
-class ImageChooser : Fragment() {
+class ImageChooserFragment : Fragment() {
     private lateinit var navController: NavController
     private val sharedViewModel: GenerateCoverViewModel by activityViewModels()
     private var _binding: FragmentImageChooserBinding? = null
@@ -115,6 +110,4 @@ class ImageChooser : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-
 }

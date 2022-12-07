@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import at.ac.tuwien.inso.databinding.FragmentGenerateCoverBinding
 import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
@@ -21,7 +20,6 @@ class GenerateCoverFragment : Fragment(R.layout.fragment_generate_cover) {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentGenerateCoverBinding.inflate(inflater, container, false)
-
 
         binding.btnGenerate.setOnClickListener {
             sharedViewModel.setPrompt(binding.editTextPrompt.text.toString())

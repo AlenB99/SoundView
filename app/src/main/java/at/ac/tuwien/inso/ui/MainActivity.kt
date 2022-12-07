@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -40,7 +39,6 @@ class MainActivity : AppCompatActivity() {
         // Check if the storage permissions have been granted
         if (requestCode == REQUEST_CODE_STORAGE_PERMISSIONS) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
             } else {
                 // The storage permissions have not been granted, show an error message
                 // Toast.makeText(this, "Unable to access storage. The app will not function properly.", Toast.LENGTH_SHORT).show()
@@ -57,12 +55,9 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
         setSupportActionBar(findViewById(R.id.toolbar))
         setupActionBarWithNavController(navController)
-
-
     }
 
-
     override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp() || super.onSupportNavigateUp();
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 }

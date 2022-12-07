@@ -27,7 +27,6 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.util.Date
 
-
 /**
  * A simple [Fragment] subclass.
  * Use the [ImageToStorageFragment.newInstance] factory method to
@@ -41,7 +40,6 @@ class ImageToStorageFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,8 +65,7 @@ class ImageToStorageFragment : Fragment() {
                 override fun onBitmapLoaded(bitmap: Bitmap, from: LoadedFrom?) {
                     // Save the bitmap to a file
 
-                    val file = File(view.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                        , sharedViewModel.prompt.value+ "_" + Date() +  ".png")
+                    val file = File(view.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), sharedViewModel.prompt.value + "_" + Date() + ".png")
                     (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
                     (activity as AppCompatActivity).supportActionBar?.title = "Cover Art"
                     (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -98,7 +95,7 @@ class ImageToStorageFragment : Fragment() {
             (view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
                 .hideSoftInputFromWindow(it.windowToken, 0)
         }
-        return binding.root;
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -113,8 +110,7 @@ class ImageToStorageFragment : Fragment() {
                 activity?.onBackPressed()
                 true
             }
-            else              -> super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
-
 }
