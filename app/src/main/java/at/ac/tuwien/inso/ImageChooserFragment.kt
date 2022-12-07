@@ -57,7 +57,6 @@ class ImageChooser : Fragment() {
 
         val backButton = binding.backButton
         backButton.setOnClickListener{
-            Toast.makeText(view.context, "You clicked me.", Toast.LENGTH_SHORT).show()
             val intent = Intent(view.context, MainActivity::class.java)
             startActivity(intent)
         }
