@@ -3,7 +3,7 @@ import os
 
 
 def image_generate(x):
-    openai.api_key = "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"
+    openai.api_key = "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"
     response = openai.Image.create(
         prompt=str(x),
         n=4,
