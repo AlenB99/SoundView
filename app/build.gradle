@@ -27,6 +27,7 @@ android {
         python {
             pip {
                 install "openai"
+                install "azapi"
             }
         }
 

@@ -1,4 +1,5 @@
 import openai
+import azapi
 import os
 
 
@@ -17,3 +18,18 @@ def image_generate(x):
     return image_urls
 
 
+def get_song_lyrics(x):
+    artist_name= x.split("-")[0]
+    song_name= x.split("-")[1]
+    API = azapi.AZlyrics(accuracy=0.5)
+    API.artist = artist_name
+    API.title = song_name
+
+    API.getLyrics(save=True, ext='lrc')
+
+    #print(API.lyrics)
+    # Correct Artist and Title are updated from webpage
+    #print(API.title, API.artist)
+
+    #returns lyrics as string
+    return API.lyrics
