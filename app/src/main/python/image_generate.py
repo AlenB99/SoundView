@@ -50,11 +50,10 @@ def nlp_on_lyrics(lyrics):
     rake_object = RAKE.Rake(stop_dir)
 
     # Sample text to test RAKE
-    text = 
+    text = lyrics
 
     # Extract keywords
     keywords = rake_object.run(text)
-    print ("keywords: ", keywords)
     keywords_one =keyword_selector(text, keywords, 0)
     keywords_two =keyword_selector(text, keywords, 1)
     return keywords_one
