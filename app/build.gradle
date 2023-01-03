@@ -28,6 +28,8 @@ android {
             pip {
                 install "openai"
                 install "azapi"
+                install "python-rake"
+                install "nltk"
             }
         }
 

@@ -1,6 +1,8 @@
 import openai
 import azapi
-import os
+import RAKE
+import nltk
+from nltk.corpus import stopwords
 
 
 def image_generate(x):
@@ -27,9 +29,32 @@ def get_song_lyrics(x):
 
     API.getLyrics(save=True, ext='lrc')
 
-    #print(API.lyrics)
-    # Correct Artist and Title are updated from webpage
-    #print(API.title, API.artist)
+    return API.lyrics.replace("\n"," ")
 
-    #returns lyrics as string
-    return API.lyrics
+
+    
+
+def keyword_selector(text, keywords, i):
+    if len(keywords[i][0].split()) > 1:
+        text_new = text
+        text_new+=" "
+        text_new+= keywords[i][0] 
+        if len(text_new.split()) >= 4:
+            return text_new
+        
+        else:
+            keyword_selector(text_new, keywords, i+1) 
+
+def nlp_on_lyrics(lyrics):
+    stop_dir = stopwords.words('english')
+    rake_object = RAKE.Rake(stop_dir)
+
+    # Sample text to test RAKE
+    text = 
+
+    # Extract keywords
+    keywords = rake_object.run(text)
+    print ("keywords: ", keywords)
+    keywords_one =keyword_selector(text, keywords, 0)
+    keywords_two =keyword_selector(text, keywords, 1)
+    return 
