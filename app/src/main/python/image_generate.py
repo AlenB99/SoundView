@@ -32,7 +32,7 @@ def get_song_lyrics(x):
     return API.lyrics.replace("\n"," ")
 
 
-    
+
 
 def keyword_selector(text, keywords, i):
     if len(keywords[i][0].split()) > 1:
@@ -57,4 +57,4 @@ def nlp_on_lyrics(lyrics):
     print ("keywords: ", keywords)
     keywords_one =keyword_selector(text, keywords, 0)
     keywords_two =keyword_selector(text, keywords, 1)
-    return 
+    return keywords_one
