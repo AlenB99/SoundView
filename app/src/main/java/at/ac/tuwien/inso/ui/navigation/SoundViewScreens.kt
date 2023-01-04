@@ -5,6 +5,7 @@ package at.ac.tuwien.inso.ui.navigation
  */
 enum class SoundViewScreens(val route: String) {
     ImageChooserScreen("imageChoose"),
-    ImageToStorageScreen("imageStorage");
+    ImageToStorageScreen("imageStorage"),
+    ImageGenerateDevToolScreen("imageDev");
 }
 

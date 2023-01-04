@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -20,10 +21,17 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import at.ac.tuwien.inso.R
 import at.ac.tuwien.inso.ui.navigation.SoundViewScreens
+import coil.compose.rememberAsyncImagePainter
+import com.chaquo.python.PyException
+import com.chaquo.python.Python
+import com.chaquo.python.android.AndroidPlatform
 
 
 @Composable
-fun ImageChooser(navController: NavController) {
+fun ImageChooser(navController: NavController, prompt: String) {
+    val urlList = pythonScript(prompt);
+
+
     MaterialTheme {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -40,7 +48,7 @@ fun ImageChooser(navController: NavController) {
                 })
             Row{
                 Image(
-                    painter = painterResource(id = R.drawable.placeholder),
+                    painter = rememberAsyncImagePainter(urlList[0]),
                     contentDescription = stringResource(id = R.string.app_name),
                     modifier = imageModifier
                 )
@@ -73,7 +81,33 @@ fun ImageChooser(navController: NavController) {
     }
 }
 
-    @Composable
+@Composable
+fun pythonScript(prompt: String): List<String> {
+    var urlList: List<String> = listOf<String>("", "", "", "")
+    if (!Python.isStarted()) {
+        Python.start(AndroidPlatform(LocalContext.current))
+    }
+
+    val py = Python.getInstance()
+    val module = py.getModule("image_generate")
+    try {
+        val url = module.callAttr("image_generate", prompt)
+            .toString()
+         urlList = url.split(",").map {
+            it.trim()
+                .replace("[", "").replace("]", "")
+                .replace("'", "")
+        }
+        return urlList;
+        // From python script we get a PyObject, which is converted to a string. Afterwards
+        // its added to urlList, so that we can select the urls through indexing
+    } catch (e: PyException) {
+        println(e.message + " ")
+    }
+    return urlList;
+}
+
+@Composable
     fun SongTitle(name: String) {
         Text(text = "Hello, $name!", style = MaterialTheme.typography.h3)
     }
@@ -91,7 +125,8 @@ fun ImageChooser(navController: NavController) {
     fun PreviewGreeting() {
         MaterialTheme {
             ImageChooser(
-                navController = rememberNavController()
+                navController = rememberNavController(),
+                prompt = "test"
             )
         }
     }

@@ -47,5 +47,15 @@ fun ImageToStorage(navController: NavController) {
     }
 }
 
+@Preview(showBackground = true, device = Devices.PIXEL_3A)
+@Composable
+fun PreviewItS() {
+    MaterialTheme {
+        ImageToStorage(
+            navController = rememberNavController()
+        )
+    }
+}
+
 
 
