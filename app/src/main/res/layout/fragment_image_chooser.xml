@@ -47,7 +47,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageView6"
-        tools:src="@drawable/_228837" />
+        tools:src="@drawable/placeholder" />
 
     <ImageView
         android:id="@+id/imageView6"
@@ -61,7 +61,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView5"
         app:layout_constraintTop_toBottomOf="@+id/spacenew"
-        tools:src="@drawable/_228837" />
+        tools:src="@drawable/placeholder" />
 
 
     <ImageView
@@ -78,7 +78,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView6"
-        tools:src="@drawable/_228837" />
+        tools:src="@drawable/placeholder" />
 
     <ImageView
         android:id="@+id/imageView7"
@@ -93,7 +93,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView8"
         app:layout_constraintTop_toBottomOf="@+id/imageView6"
-        tools:src="@drawable/_228837" />
+        tools:src="@drawable/placeholder" />
 
 
     <ProgressBar

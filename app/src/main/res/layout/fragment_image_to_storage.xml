@@ -30,7 +30,7 @@
         android:adjustViewBounds="true"
         android:maxWidth="400dp"
         android:maxHeight="400dp"
-        android:src="@drawable/_228837"
+        android:src="@drawable/placeholder"
         app:layout_constraintBottom_toTopOf="@+id/space3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

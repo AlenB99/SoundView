@@ -102,7 +102,7 @@ class ImageToStorageFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
+/*
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val activity = activity as? MainActivity
         return when (item.itemId) {
@@ -113,4 +113,5 @@ class ImageToStorageFragment : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+    */
 }
