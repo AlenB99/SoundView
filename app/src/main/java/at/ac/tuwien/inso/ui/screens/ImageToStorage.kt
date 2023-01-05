@@ -19,6 +19,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import at.ac.tuwien.inso.R
 import at.ac.tuwien.inso.ui.navigation.SoundViewScreens
+import at.ac.tuwien.inso.ui.theme.AppTheme
 import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
 import coil.compose.rememberAsyncImagePainter
 import org.koin.androidx.compose.getViewModel
@@ -89,7 +90,7 @@ fun ImageToStorage(navController: NavController, viewModel: GenerateCoverViewMod
 @Preview(showBackground = true, device = Devices.PIXEL_3A)
 @Composable
 fun PreviewItS() {
-    MaterialTheme {
+    AppTheme {
         ImageToStorage(
             navController = rememberNavController(),
             viewModel = getViewModel()
