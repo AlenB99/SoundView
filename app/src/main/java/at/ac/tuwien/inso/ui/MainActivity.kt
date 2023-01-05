@@ -10,7 +10,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import at.ac.tuwien.inso.ui.navigation.SoundViewNavigation
-import at.ac.tuwien.inso.ui.theme.AndroidArchitectureExampleTheme
+import at.ac.tuwien.inso.ui.theme.AppTheme
 import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
@@ -85,7 +85,7 @@ class MainActivity : ComponentActivity() {
 
 
             // This sets the correct theming for the Application
-            AndroidArchitectureExampleTheme {
+            AppTheme {
 
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {

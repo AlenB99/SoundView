@@ -5,9 +5,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
@@ -58,95 +58,115 @@ fun ImageChooser(navController: NavController, prompt: String, viewModel: Genera
         CircularProgressIndicator(color = Color.Black)
     } else {
         viewModel.setImageurls(results.value!!)
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text(text = "Images generated") },
+                    navigationIcon = if (navController.previousBackStackEntry != null) {
+                        {
+                            IconButton(onClick = { navController.navigateUp() }) {
+                                Icon(
+                                    imageVector = Icons.Filled.ArrowBack,
+                                    contentDescription = "Back"
+                                )
+                            }
+                        }
+                    } else {
+                        null
+                    }
 
-        MaterialTheme {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+                )
+            },
+            content = { padding ->
+                Column(
+                    modifier = Modifier.padding(padding).fillMaxHeight(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ){
 
-                val imageModifier = Modifier
-                    .size(150.dp)
-                    .padding(5.dp)
-                    .clip(RoundedCornerShape(25.dp))
-                Row{
-                    SubcomposeAsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(results.value!![0])
-                            .crossfade(true)
-                            .build(),
-                        loading = {
-                            CircularProgressIndicator()
-                        },
-                        contentDescription = stringResource(id = R.string.app_name),
-                        modifier = imageModifier
-                            .clickable(onClick = {
-                                viewModel.setImageurl(0)
-                                navController.navigate(route = SoundViewScreens.ImageToStorageScreen.route)
-                            })
+                    val imageModifier = Modifier
+                        .size(150.dp)
+                        .padding(5.dp)
+                        .clip(RoundedCornerShape(25.dp))
+                    Row{
+                        SubcomposeAsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(results.value!![0])
+                                .crossfade(true)
+                                .build(),
+                            loading = {
+                                CircularProgressIndicator()
+                            },
+                            contentDescription = stringResource(id = R.string.app_name),
+                            modifier = imageModifier
+                                .clickable(onClick = {
+                                    viewModel.setImageurl(0)
+                                    navController.navigate(route = SoundViewScreens.ImageToStorageScreen.route)
+                                })
 
-                    )
+                        )
 
-                    SubcomposeAsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(results.value!![1])
-                            .crossfade(true)
-                            .build(),
-                        loading = {
-                            CircularProgressIndicator()
-                        },
-                        contentDescription = stringResource(id = R.string.app_name),
-                        modifier = imageModifier
-                            .clickable(onClick = {
-                                viewModel.setImageurl(1)
-                                navController.navigate(route = SoundViewScreens.ImageToStorageScreen.route)
-                            })
+                        SubcomposeAsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(results.value!![1])
+                                .crossfade(true)
+                                .build(),
+                            loading = {
+                                CircularProgressIndicator()
+                            },
+                            contentDescription = stringResource(id = R.string.app_name),
+                            modifier = imageModifier
+                                .clickable(onClick = {
+                                    viewModel.setImageurl(1)
+                                    navController.navigate(route = SoundViewScreens.ImageToStorageScreen.route)
+                                })
 
-                    )
+                        )
+                    }
+
+                    Row{
+                        SubcomposeAsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(results.value!![2])
+                                .crossfade(true)
+                                .build(),
+                            loading = {
+                                CircularProgressIndicator()
+                            },
+                            contentDescription = stringResource(id = R.string.app_name),
+                            modifier = imageModifier
+                                .clickable(onClick = {
+                                    viewModel.setImageurl(2)
+                                    navController.navigate(route = SoundViewScreens.ImageToStorageScreen.route)
+                                })
+
+                        )
+
+                        SubcomposeAsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(results.value!![3])
+                                .crossfade(true)
+                                .build(),
+                            loading = {
+                                CircularProgressIndicator()
+                            },
+                            contentDescription = stringResource(id = R.string.app_name),
+                            modifier = imageModifier
+                                .clickable(onClick = {
+                                    viewModel.setImageurl(3)
+                                    navController.navigate(route = SoundViewScreens.ImageToStorageScreen.route)
+                                })
+
+                        )
+                    }
+                    Text(text = "Choose one to Download!", style = MaterialTheme.typography.caption)
+                    SongTitle(name = "world")
+                    Artist(name = "world")
+                    Keywords(name = "world")
                 }
-
-                Row{
-                    SubcomposeAsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(results.value!![2])
-                            .crossfade(true)
-                            .build(),
-                        loading = {
-                            CircularProgressIndicator()
-                        },
-                        contentDescription = stringResource(id = R.string.app_name),
-                        modifier = imageModifier
-                            .clickable(onClick = {
-                                viewModel.setImageurl(2)
-                                navController.navigate(route = SoundViewScreens.ImageToStorageScreen.route)
-                            })
-
-                    )
-
-                    SubcomposeAsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(results.value!![3])
-                            .crossfade(true)
-                            .build(),
-                        loading = {
-                            CircularProgressIndicator()
-                        },
-                        contentDescription = stringResource(id = R.string.app_name),
-                        modifier = imageModifier
-                            .clickable(onClick = {
-                                viewModel.setImageurl(3)
-                                navController.navigate(route = SoundViewScreens.ImageToStorageScreen.route)
-                            })
-
-                    )
-                }
-                Text(text = "Choose one to Download!", style = MaterialTheme.typography.caption)
-                SongTitle(name = "world")
-                Artist(name = "world")
-                Keywords(name = "world")
             }
-        }
+        )
+
     }
 
 

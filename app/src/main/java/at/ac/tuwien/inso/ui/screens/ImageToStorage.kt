@@ -4,9 +4,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
@@ -25,45 +25,65 @@ import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun ImageToStorage(navController: NavController, viewModel: GenerateCoverViewModel) {
-    MaterialTheme {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Cover Art") },
+                navigationIcon = if (navController.previousBackStackEntry != null) {
+                    {
+                        IconButton(onClick = { navController.navigateUp() }) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = "Back"
+                            )
+                        }
+                    }
+                } else {
+                    null
+                }
 
-            val imageModifier = Modifier
-                .size(150.dp)
-                .padding(5.dp)
-                .clip(RoundedCornerShape(25.dp))
-
-            Image(
-                painter =  rememberAsyncImagePainter(viewModel.imageurl.value),
-                contentDescription = stringResource(id = R.string.app_name),
-                modifier = imageModifier
             )
+        },
+        content = { padding ->
+            Column(
+                modifier = Modifier.padding(padding),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
 
-            SongTitle(name = "world")
-            Artist(name = "world")
-            Keywords(name = "world")
+                val imageModifier = Modifier
+                    .size(150.dp)
+                    .padding(5.dp)
+                    .clip(RoundedCornerShape(25.dp))
 
-            Button(
-                onClick = {
-                          //#TODO DOWNLOAD FUNCTION
-                },
-                // Uses ButtonDefaults.ContentPadding by default
-                contentPadding = PaddingValues(
-                    start = 20.dp,
-                    top = 12.dp,
-                    end = 20.dp,
-                    bottom = 12.dp
+                Image(
+                    painter =  rememberAsyncImagePainter(viewModel.imageurl.value),
+                    contentDescription = stringResource(id = R.string.app_name),
+                    modifier = imageModifier
                 )
-            ) {
-                // Inner content including an icon and a text label
-                Text("Download")
+
+                SongTitle(name = "world")
+                Artist(name = "world")
+                Keywords(name = "world")
+
+                Button(
+                    onClick = {
+                        //#TODO DOWNLOAD FUNCTION
+                    },
+                    // Uses ButtonDefaults.ContentPadding by default
+                    contentPadding = PaddingValues(
+                        start = 20.dp,
+                        top = 12.dp,
+                        end = 20.dp,
+                        bottom = 12.dp
+                    )
+                ) {
+                    // Inner content including an icon and a text label
+                    Text("Download")
+                }
             }
         }
-    }
+    )
 }
 
 @Preview(showBackground = true, device = Devices.PIXEL_3A)
