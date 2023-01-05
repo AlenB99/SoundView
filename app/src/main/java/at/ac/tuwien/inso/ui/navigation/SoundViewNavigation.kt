@@ -13,7 +13,7 @@ import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
 
 @ExperimentalComposeUiApi
 @Composable
-fun SoundViewNavigation(navHostController: NavHostController) {
+fun SoundViewNavigation(navHostController: NavHostController, viewModel: GenerateCoverViewModel) {
     // This is a "wrapper" view for showing the correct screen.
     // Initially, the "FriendList" is shown.
 
@@ -24,16 +24,18 @@ fun SoundViewNavigation(navHostController: NavHostController) {
     ) {
         composable(SoundViewScreens.ImageChooserScreen.route) {
         ImageChooser(
-            navController = navHostController, prompt = "test"
+            navController = navHostController,
+            viewModel = viewModel,
+            prompt = "test"
         )
         }
 
         composable(SoundViewScreens.ImageToStorageScreen.route) {
-            ImageToStorage(navController = navHostController)
+            ImageToStorage(navController = navHostController, viewModel = viewModel)
         }
 
         composable(SoundViewScreens.ImageGenerateDevToolScreen.route) {
-            ImageGeneratorDevTool(navController = navHostController)
+            ImageGeneratorDevTool(navController = navHostController, viewModel = viewModel)
         }
     }
 }

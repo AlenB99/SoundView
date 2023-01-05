@@ -12,8 +12,6 @@ import androidx.navigation.compose.rememberNavController
 import at.ac.tuwien.inso.ui.navigation.SoundViewNavigation
 import at.ac.tuwien.inso.ui.theme.AndroidArchitectureExampleTheme
 import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
-import com.chaquo.python.Python
-import com.chaquo.python.android.AndroidPlatform
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 
@@ -83,7 +81,7 @@ class MainActivity : ComponentActivity() {
 
             // Inject the ViewModel with koin
             //val viewModel = getViewModel<GenerateCoverViewModel>()
-            //val viewModel = getViewModel<GenerateCoverViewModel>()
+            val viewModel = getViewModel<GenerateCoverViewModel>()
 
 
             // This sets the correct theming for the Application
@@ -93,7 +91,7 @@ class MainActivity : ComponentActivity() {
                 Surface(color = MaterialTheme.colors.background) {
                     navController = rememberNavController()
                     // The navigation host will handle the currently shown screen
-                    SoundViewNavigation(navHostController = navController)
+                    SoundViewNavigation(navHostController = navController, viewModel = viewModel)
                 }
             }
         }

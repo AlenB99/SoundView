@@ -8,7 +8,6 @@ import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.Role.Companion.Button
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -16,9 +15,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import at.ac.tuwien.inso.ui.navigation.SoundViewScreens
+import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
+import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 @Composable
-fun ImageGeneratorDevTool(navController: NavController) {
+fun ImageGeneratorDevTool(navController: NavController, viewModel: GenerateCoverViewModel) {
     MaterialTheme {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -33,7 +35,10 @@ fun ImageGeneratorDevTool(navController: NavController) {
                 }
             )
             Button(
-                onClick = { navController.navigate(route = SoundViewScreens.ImageChooserScreen.route)},
+                onClick = {
+                    viewModel.setPrompt(text.text)
+                    navController.navigate(route = SoundViewScreens.ImageChooserScreen.route)
+                          },
                 // Uses ButtonDefaults.ContentPadding by default
                 contentPadding = PaddingValues(
                     start = 20.dp,
@@ -56,7 +61,8 @@ fun ImageGeneratorDevTool(navController: NavController) {
 fun PreviewGDT() {
     MaterialTheme {
         ImageGeneratorDevTool(
-            navController = rememberNavController()
+            navController = rememberNavController(),
+            viewModel = getViewModel()
         )
     }
 }
