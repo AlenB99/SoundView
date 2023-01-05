@@ -57,3 +57,19 @@ def nlp_on_lyrics(lyrics):
     keywords_one =keyword_selector(text, keywords, 0)
     keywords_two =keyword_selector(text, keywords, 1)
     return keywords_one
+
+
+def scan_song(binary_file):
+    data = {
+    'api_token': '1ec6b173591049368d609392d7a2a5c5' #valid until 18th of January
+    }
+    files = {
+    'file': binary_file,
+    }
+    result = requests.post('https://api.audd.io/recognizeWithOffset/', data=data, files=files)
+    songtext= json.loads(result.text)
+    try:
+        songname = songtext["result"]["artist"] + " - " + songtext["result"]["title"] 
+        return songname
+    except:
+        return "Could not find song"
