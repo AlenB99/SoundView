@@ -23,6 +23,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import at.ac.tuwien.inso.R
 import at.ac.tuwien.inso.ui.navigation.SoundViewScreens
+import at.ac.tuwien.inso.ui.theme.AppTheme
 import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
 import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
@@ -79,7 +80,9 @@ fun ImageChooser(navController: NavController, prompt: String, viewModel: Genera
             },
             content = { padding ->
                 Column(
-                    modifier = Modifier.padding(padding).fillMaxHeight(),
+                    modifier = Modifier
+                        .padding(padding)
+                        .fillMaxHeight(),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ){
@@ -212,7 +215,7 @@ suspend fun pythonScriptMain(py: Python, prompt: String): List<String> {
     @Preview(showBackground = true, device = Devices.PIXEL_3A)
     @Composable
     fun PreviewGreeting() {
-        MaterialTheme {
+        AppTheme {
             ImageChooser(
                 navController = rememberNavController(),
                 prompt = "test",

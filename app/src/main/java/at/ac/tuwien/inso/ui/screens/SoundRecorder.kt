@@ -21,24 +21,17 @@ import org.koin.androidx.compose.getViewModel
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 @Composable
-fun ImageGeneratorDevTool(navController: NavController, viewModel: GenerateCoverViewModel) {
+fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewModel) {
     AppTheme {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            var text by remember { mutableStateOf(TextFieldValue("")) }
-            TextField(
-                value = text,
-                onValueChange = { newText ->
-                    text = newText
-                }
-            )
+
             Button(
                 onClick = {
-                    viewModel.setPrompt(text.text)
-                    navController.navigate(route = SoundViewScreens.ImageChooserScreen.route)
+                    navController.navigate(route = SoundViewScreens.ImageGenerateDevToolScreen.route)
                           },
                 // Uses ButtonDefaults.ContentPadding by default
                 contentPadding = PaddingValues(
@@ -49,7 +42,7 @@ fun ImageGeneratorDevTool(navController: NavController, viewModel: GenerateCover
                 )
             ) {
                 // Inner content including an icon and a text label
-                Text("Generate")
+                Text("Record Sound")
             }
 
         }
@@ -59,7 +52,7 @@ fun ImageGeneratorDevTool(navController: NavController, viewModel: GenerateCover
 
 @Preview(showBackground = true, device = Devices.PIXEL_3A)
 @Composable
-fun PreviewGDT() {
+fun PreviewSoundRecorder() {
     AppTheme {
         ImageGeneratorDevTool(
             navController = rememberNavController(),

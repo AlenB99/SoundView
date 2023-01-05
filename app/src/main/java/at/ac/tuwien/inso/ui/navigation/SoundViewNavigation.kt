@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import at.ac.tuwien.inso.ui.screens.ImageChooser
 import at.ac.tuwien.inso.ui.screens.ImageGeneratorDevTool
 import at.ac.tuwien.inso.ui.screens.ImageToStorage
+import at.ac.tuwien.inso.ui.screens.SoundRecorder
 import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
 
 
@@ -20,13 +21,13 @@ fun SoundViewNavigation(navHostController: NavHostController, viewModel: Generat
 
     NavHost(
         navController = navHostController,
-        startDestination = SoundViewScreens.ImageGenerateDevToolScreen.route
+        startDestination = SoundViewScreens.SoundRecorderScreen.route
     ) {
         composable(SoundViewScreens.ImageChooserScreen.route) {
         ImageChooser(
             navController = navHostController,
             viewModel = viewModel,
-            prompt = "test"
+            prompt = viewModel.prompt.value.toString()
         )
         }
 
@@ -36,6 +37,9 @@ fun SoundViewNavigation(navHostController: NavHostController, viewModel: Generat
 
         composable(SoundViewScreens.ImageGenerateDevToolScreen.route) {
             ImageGeneratorDevTool(navController = navHostController, viewModel = viewModel)
+        }
+        composable(SoundViewScreens.SoundRecorderScreen.route) {
+            SoundRecorder(navController = navHostController, viewModel = viewModel)
         }
     }
 }
