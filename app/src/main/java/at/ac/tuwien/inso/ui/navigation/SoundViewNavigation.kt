@@ -26,7 +26,7 @@ fun SoundViewNavigation(navHostController: NavHostController, viewModel: Generat
         ImageChooser(
             navController = navHostController,
             viewModel = viewModel,
-            prompt = "test"
+            prompt = viewModel.prompt.value.toString()
         )
         }
 
