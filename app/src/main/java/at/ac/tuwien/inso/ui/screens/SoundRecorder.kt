@@ -18,6 +18,7 @@ import at.ac.tuwien.inso.ui.theme.AppTheme
 import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
 import org.koin.androidx.compose.getViewModel
 
+private var mediaRecorder: MediaRecorder? = null
 @Composable
 fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewModel) {
     AppTheme {
