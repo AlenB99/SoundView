@@ -1,14 +1,13 @@
 package at.ac.tuwien.inso.ui.screens
 
+import android.media.MediaRecorder
+import android.os.Environment
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,7 +17,6 @@ import at.ac.tuwien.inso.ui.navigation.SoundViewScreens
 import at.ac.tuwien.inso.ui.theme.AppTheme
 import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
 import org.koin.androidx.compose.getViewModel
-import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 @Composable
 fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewModel) {
@@ -31,6 +29,19 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
 
             Button(
                 onClick = {
+                    var savepath = (Environment.getExternalStorageDirectory().absolutePath
+                            + "/" + "recordingAudio.mp3")
+                    var mediaRecorder = MediaRecorder()
+                    mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
+                    mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+                    mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+                    mediaRecorder.setOutputFile(savepath)
+
+
+                    mediaRecorder.prepare()
+                    mediaRecorder.start()
+
+
                     navController.navigate(route = SoundViewScreens.ImageGenerateDevToolScreen.route)
                           },
                 // Uses ButtonDefaults.ContentPadding by default
