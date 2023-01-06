@@ -83,9 +83,9 @@ dependencies {
     //Material 3
     implementation "androidx.compose.material3:material3:1.0.1"
 
-    //Picasso
-    implementation 'com.squareup.picasso:picasso:2.71828'
 
+    //Google Accompanist
+    implementation "com.google.accompanist:accompanist-permissions:0.28.0"
 
     //Coil
     implementation "io.coil-kt:coil-compose:2.0.0-rc01"
