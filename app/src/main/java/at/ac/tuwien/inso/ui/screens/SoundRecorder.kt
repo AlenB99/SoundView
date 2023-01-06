@@ -17,6 +17,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import at.ac.tuwien.inso.ui.theme.AppTheme
 import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
+import com.chaquo.python.PyException
+import com.chaquo.python.Python
+import com.chaquo.python.android.AndroidPlatform
 import com.google.accompanist.permissions.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -25,7 +28,8 @@ import kotlinx.coroutines.withContext
 import org.koin.androidx.compose.getViewModel
 import java.io.File
 import java.io.IOException
-import java.util.Date
+import java.util.*
+import java.util.Base64.getEncoder
 
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -51,13 +55,12 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                     setAudioSource(MediaRecorder.AudioSource.MIC)
                     setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
 
-                    println("BACK ON "+ file.exists())
                     if (!file.exists()){
                         file.mkdirs();
                     }
-
-                    setOutputFile(file.toString() + "/" + Date() + ".ogg")
-                    println(file.toString() + "/" + Date() + ".ogg")
+                    val fileName = file.toString() + "/" + Date() + ".ogg"
+                    setOutputFile(fileName)
+                    println(fileName)
                     setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
 
                     try {
@@ -73,6 +76,24 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                             delay(10000) // Record for 10 seconds
                             stop()
                             release()
+                            val fileRead = File(fileName)
+                            val binaryData = fileRead.readBytes()
+                            val base64Str = getEncoder().encodeToString(binaryData)
+                            if (!Python.isStarted()) {
+                                Python.start(AndroidPlatform(context))
+                            }
+                            val py = Python.getInstance()
+                            val module = py.getModule("image_generate")
+                            try {
+                                val text = module.callAttr("scan_song", base64Str)
+                                    .toString()
+                                println("TEXT")
+                                println(text)
+                                // From python script we get a PyObject, which is converted to a string. Afterwards
+                                // its added to urlList, so that we can select the urls through indexing
+                            } catch (e: PyException) {
+                                println(e.message + " ")
+                            }
                             isRecording = false
                         }
                     }

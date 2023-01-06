@@ -1,5 +1,6 @@
 import openai
 import azapi
+import requests
 import RAKE
 import nltk
 from nltk.corpus import stopwords
@@ -67,9 +68,4 @@ def scan_song(binary_file):
     'file': binary_file,
     }
     result = requests.post('https://api.audd.io/recognizeWithOffset/', data=data, files=files)
-    songtext= json.loads(result.text)
-    try:
-        songname = songtext["result"]["artist"] + " - " + songtext["result"]["title"] 
-        return songname
-    except:
-        return "Could not find song"
+    return result.text
