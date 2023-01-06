@@ -8,6 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,7 +33,7 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                 onClick = {
                     var savepath = (Environment.getExternalStorageDirectory().absolutePath
                             + "/" + "recordingAudio.mp3")
-                    var mediaRecorder = MediaRecorder()
+                    var mediaRecorder = MediaRecorder(LocalContext.current)
                     mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
                     mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
                     mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
