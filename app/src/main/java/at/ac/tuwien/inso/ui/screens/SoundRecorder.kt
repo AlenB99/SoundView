@@ -134,20 +134,18 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
             val textToShow = if (!allPermissionsRevoked) {
                 // If not all the permissions are revoked, it's because the user accepted the COARSE
                 // location permission, but not the FINE one.
-                "Yay! Thanks for letting me access your approximate location. " +
-                        "But you know what would be great? If you allow me to know where you " +
-                        "exactly are. Thank you!"
+                "Yay! Thanks for letting me access your Audio and File System. "
             } else if (allPermissionsState.shouldShowRationale) {
                 // Both location permissions have been denied
-                "Getting your exact location is important for this app. " +
-                        "Please grant us fine location. Thank you :D"
+                "Getting your Audio while you record is important for this app. " +
+                        "Please grant us the Audio Record Permissions. Thank you :D"
             } else {
                 // First time the user sees this feature or the user doesn't want to be asked again
-                "This feature requires location permission"
+                "This feature requires Audio and File permission"
             }
 
             val buttonText = if (!allPermissionsRevoked) {
-                "Allow precise location"
+                "Allow Permissions"
             } else {
                 "Request permissions"
             }
