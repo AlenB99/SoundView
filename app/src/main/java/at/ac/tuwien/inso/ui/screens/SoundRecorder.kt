@@ -40,11 +40,17 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
     var isFinished by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
-    val allPermissionsState = rememberMultiplePermissionsState(
+    val allPermissionsState1 = rememberMultiplePermissionsState(
         listOf(
-            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.MANAGE_EXTERNAL_STORAGE,
+            Manifest.permission.RECORD_AUDIO
+        )
+    )
+    val allPermissionsState2 = rememberMultiplePermissionsState(
+        listOf(
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.RECORD_AUDIO
         )
     )
     LaunchedEffect(isFinished) {
@@ -52,7 +58,7 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
             navController.navigate(route = SoundViewScreens.ImageGenerateDevToolScreen.route)
         }
     }
-    if (allPermissionsState.allPermissionsGranted) {
+    if (allPermissionsState1.allPermissionsGranted || allPermissionsState2.allPermissionsGranted)   {
         Text("Permission Granted")
         Button(
             onClick = {
@@ -127,15 +133,17 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
     }
     else {
         Column {
-            val allPermissionsRevoked =
-                allPermissionsState.permissions.size ==
-                        allPermissionsState.revokedPermissions.size
-
-            val textToShow = if (!allPermissionsRevoked) {
+            val allPermissionsRevoked1 =
+                allPermissionsState1.permissions.size ==
+                        allPermissionsState1.revokedPermissions.size
+            val allPermissionsRevoked2 =
+                allPermissionsState2.permissions.size ==
+                        allPermissionsState2.revokedPermissions.size
+            val textToShow = if (!allPermissionsRevoked1 || !allPermissionsRevoked2) {
                 // If not all the permissions are revoked, it's because the user accepted the COARSE
                 // location permission, but not the FINE one.
                 "Yay! Thanks for letting me access your Audio and File System. "
-            } else if (allPermissionsState.shouldShowRationale) {
+            } else if (allPermissionsState1.shouldShowRationale || allPermissionsState2.shouldShowRationale) {
                 // Both location permissions have been denied
                 "Getting your Audio while you record is important for this app. " +
                         "Please grant us the Audio Record Permissions. Thank you :D"
@@ -144,7 +152,7 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                 "This feature requires Audio and File permission"
             }
 
-            val buttonText = if (!allPermissionsRevoked) {
+            val buttonText = if (!allPermissionsRevoked1 || !allPermissionsRevoked2) {
                 "Allow Permissions"
             } else {
                 "Request permissions"
@@ -152,7 +160,10 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
 
             Text(text = textToShow)
             Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = { allPermissionsState.launchMultiplePermissionRequest() }) {
+            Button(onClick = { allPermissionsState1.launchMultiplePermissionRequest()
+                allPermissionsState2.launchMultiplePermissionRequest()
+
+            }) {
                 Text(buttonText)
             }
         }
