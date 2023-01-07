@@ -2,6 +2,7 @@ import openai
 import azapi
 import requests
 import RAKE
+import base64
 import nltk
 from nltk.corpus import stopwords
 
@@ -64,8 +65,10 @@ def scan_song(binary_file):
     data = {
     'api_token': '1ec6b173591049368d609392d7a2a5c5' #valid until 18th of January
     }
+    btfile = bytes(binary_file)
+
     files = {
-    'file': binary_file,
+    'file': btfile,
     }
-    result = requests.post('https://api.audd.io/recognizeWithOffset/', data=data, files=files)
+    result = requests.post('https://api.audd.io/', data=data, files=files)
     return result.text

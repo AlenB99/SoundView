@@ -73,7 +73,7 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                     isRecording = true
                     coroutineScope.launch {
                         withContext(Dispatchers.IO) {
-                            delay(10000) // Record for 10 seconds
+                            delay(20000) // Record for 10 seconds
                             stop()
                             release()
                             val fileRead = File(fileName)
@@ -85,7 +85,7 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                             val py = Python.getInstance()
                             val module = py.getModule("image_generate")
                             try {
-                                val text = module.callAttr("scan_song", base64Str)
+                                val text = module.callAttr("scan_song", binaryData)
                                     .toString()
                                 println("TEXT")
                                 println(text)
