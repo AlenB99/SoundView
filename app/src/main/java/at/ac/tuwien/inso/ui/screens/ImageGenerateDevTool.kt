@@ -28,7 +28,7 @@ fun ImageGeneratorDevTool(navController: NavController, viewModel: GenerateCover
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            var text by remember { mutableStateOf(TextFieldValue("")) }
+            var text by remember { mutableStateOf(TextFieldValue(viewModel.song.value!!.title)) }
             TextField(
                 value = text,
                 onValueChange = { newText ->

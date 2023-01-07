@@ -63,7 +63,8 @@ def nlp_on_lyrics(lyrics):
 
 def scan_song(binary_file):
     data = {
-    'api_token': '1ec6b173591049368d609392d7a2a5c5' #valid until 18th of January
+    'api_token': '1ec6b173591049368d609392d7a2a5c5', #valid until 18th of January
+    'return': 'apple_music,spotify'
     }
     btfile = bytes(binary_file)
 

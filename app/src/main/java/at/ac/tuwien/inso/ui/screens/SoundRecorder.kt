@@ -15,16 +15,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import at.ac.tuwien.inso.model.Song
+import at.ac.tuwien.inso.ui.navigation.SoundViewScreens
 import at.ac.tuwien.inso.ui.theme.AppTheme
 import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
 import com.chaquo.python.PyException
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.google.accompanist.permissions.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import org.json.JSONObject
 import org.koin.androidx.compose.getViewModel
 import java.io.File
 import java.io.IOException
@@ -37,6 +37,7 @@ import java.util.Base64.getEncoder
 @Composable
 fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewModel) {
     var isRecording = false
+    var isFinished by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     val allPermissionsState = rememberMultiplePermissionsState(
@@ -46,6 +47,11 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
             Manifest.permission.READ_EXTERNAL_STORAGE,
         )
     )
+    LaunchedEffect(isFinished) {
+        if(isFinished) {
+            navController.navigate(route = SoundViewScreens.ImageGenerateDevToolScreen.route)
+        }
+    }
     if (allPermissionsState.allPermissionsGranted) {
         Text("Permission Granted")
         Button(
@@ -73,12 +79,11 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                     isRecording = true
                     coroutineScope.launch {
                         withContext(Dispatchers.IO) {
-                            delay(20000) // Record for 10 seconds
+                            delay(10000) // Record for 10 seconds
                             stop()
                             release()
                             val fileRead = File(fileName)
                             val binaryData = fileRead.readBytes()
-                            val base64Str = getEncoder().encodeToString(binaryData)
                             if (!Python.isStarted()) {
                                 Python.start(AndroidPlatform(context))
                             }
@@ -87,25 +92,33 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                             try {
                                 val text = module.callAttr("scan_song", binaryData)
                                     .toString()
-                                println("TEXT")
-                                println(text)
+                                val jsonObj = JSONObject(text).getJSONObject("result")
+                                val song = Song(
+                                    id = 0,
+                                    artist = jsonObj.get("artist").toString(),
+                                    title = jsonObj.get("title").toString()
+                                )
+                                viewModel.setSong(song)
+                                println(song)
+                                isFinished = true
                                 // From python script we get a PyObject, which is converted to a string. Afterwards
                                 // its added to urlList, so that we can select the urls through indexing
                             } catch (e: PyException) {
                                 println(e.message + " ")
                             }
                             isRecording = false
+                            println(isFinished)
                         }
                     }
-                }
 
+
+                }
 
             },
             enabled = !isRecording
         ) {
             Text("Record Audio")
         }
-
         if (isRecording) {
             Box(modifier = Modifier.padding(8.dp)) {
                 Text("Recording audio...")
