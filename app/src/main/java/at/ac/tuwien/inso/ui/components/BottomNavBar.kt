@@ -1,5 +1,6 @@
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.List
+import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -23,7 +24,7 @@ val bottomNavItems = listOf(
     BottomNavItem(
         name = "Song Search",
         route = "home",
-        icon = Icons.Rounded.Search,
+        icon = Icons.Rounded.MusicNote,
     ),
     BottomNavItem(
         name = "Image History",
