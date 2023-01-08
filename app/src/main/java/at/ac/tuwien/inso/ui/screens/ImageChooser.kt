@@ -1,6 +1,5 @@
 package at.ac.tuwien.inso.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.*
@@ -13,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
@@ -22,12 +20,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import at.ac.tuwien.inso.R
+import at.ac.tuwien.inso.model.Song
 import at.ac.tuwien.inso.ui.navigation.SoundViewScreens
 import at.ac.tuwien.inso.ui.theme.AppTheme
-import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
-import coil.compose.AsyncImage
+import at.ac.tuwien.inso.ui.viewmodel.SongViewModel
 import coil.compose.SubcomposeAsyncImage
-import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.chaquo.python.PyException
 import com.chaquo.python.Python
@@ -39,13 +36,18 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun ImageChooser(navController: NavController, prompt: String, viewModel: GenerateCoverViewModel) {
+fun ImageChooser(navController: NavController, prompt: String, viewModel: SongViewModel, songs: List<Song>) {
     if (!Python.isStarted()) {
         Python.start(AndroidPlatform(LocalContext.current))
     }
 
     val results = remember { mutableStateOf<List<String>?>(null) }
-
+    println("DATABASE:")
+    for (item in songs) {
+        println(item.id)
+        println(item.title)
+        println(item.artist)
+    }
     LaunchedEffect(Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             val data = withContext(Dispatchers.IO) {
@@ -195,7 +197,7 @@ suspend fun pythonScriptMain(py: Python, prompt: String): List<String> {
         // From python script we get a PyObject, which is converted to a string. Afterwards
         // its added to urlList, so that we can select the urls through indexing
     } catch (e: PyException) {
-        println(e.message + " ")
+        // println(e.message + " ") #TODO LOG
     }
     return urlList;
 }
@@ -213,15 +215,4 @@ suspend fun pythonScriptMain(py: Python, prompt: String): List<String> {
         Text(text = "Hello, $name!", style = MaterialTheme.typography.caption)
     }
 
-    @Preview(showBackground = true, device = Devices.PIXEL_3A)
-    @Composable
-    fun PreviewGreeting() {
-        AppTheme {
-            ImageChooser(
-                navController = rememberNavController(),
-                prompt = "test",
-                viewModel = getViewModel()
 
-            )
-        }
-    }

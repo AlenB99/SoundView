@@ -25,7 +25,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import at.ac.tuwien.inso.R
 import at.ac.tuwien.inso.ui.theme.AppTheme
-import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
+import at.ac.tuwien.inso.ui.viewmodel.SongViewModel
 import coil.compose.rememberAsyncImagePainter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +37,7 @@ import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.Q)
 @Composable
-fun ImageToStorage(navController: NavController, viewModel: GenerateCoverViewModel) {
+fun ImageToStorage(navController: NavController, viewModel: SongViewModel) {
     val context = LocalContext.current
     Scaffold(
         topBar = {
