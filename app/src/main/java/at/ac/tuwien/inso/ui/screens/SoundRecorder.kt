@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import at.ac.tuwien.inso.model.Song
@@ -206,10 +207,10 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
                     }
                     Spacer(modifier = Modifier.size(32.dp))
                     if (isRecording) {
-                        Text("Searching...")
+                        Text("Searching...", color= Color.White)
                     }
 
-                    Text(error)
+                    Text(error, color= Color.White)
                 }
             },
             bottomBar = {BottomNavBar(navController = navController)})

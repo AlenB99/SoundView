@@ -188,8 +188,7 @@ suspend fun pythonScriptMain(py: Python, prompt: String): List<String> {
     var urlList: List<String> = listOf("", "", "", "")
     val module = py.getModule("image_generate")
     try {
-        val url = module.callAttr("image_generate", prompt  +
-                "without text")
+        val url = module.callAttr("image_generate", prompt)
             .toString()
         urlList = url.split(",").map {
             it.trim()
