@@ -35,6 +35,7 @@ import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.google.accompanist.permissions.*
 import kotlinx.coroutines.*
+import org.json.JSONException
 import org.json.JSONObject
 import org.koin.androidx.compose.getViewModel
 import java.io.File
@@ -46,7 +47,7 @@ import java.util.*
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewModel) {
-    var isRecording = false
+    var isRecording by remember { mutableStateOf(false) }
     var isFinished by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -94,9 +95,28 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                     var currentRotation by remember { mutableStateOf(0f) }
 
                     val rotation = remember { Animatable(currentRotation) }
+                    LaunchedEffect(isRecording){
 
+                        if(isRecording){
+                            rotation.animateTo(
+                                targetValue = currentRotation + 360f,
+                                animationSpec = infiniteRepeatable(
+                                    animation = tween(3000, easing = LinearEasing),
+                                    repeatMode = RepeatMode.Restart
+                                )
+                            )
+
+                            {
+                                currentRotation = value
+                            }
+                        }else{
+                            currentRotation = 0f
+                        }
+
+                    }
                     Button(
-                        modifier= Modifier.size(125.dp)
+                        modifier= Modifier
+                            .size(125.dp)
                             .rotate(currentRotation),
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(containerColor = md_theme_light_primaryContainer,
@@ -124,17 +144,10 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
 
                                 start()
                                 isRecording = true
+
                                 coroutineScope.launch {
                                     withContext(Dispatchers.IO) {
-                                        coroutineScope.launch { rotation.animateTo(
-                                            targetValue = currentRotation + 360f,
-                                            animationSpec = infiniteRepeatable(
-                                                animation = tween(3000, easing = LinearEasing),
-                                                repeatMode = RepeatMode.Restart
-                                            )
-                                        ) {
-                                            currentRotation = value
-                                        }  }
+
 
                                         delay(10000) // Record for 10 seconds
                                         stop()
@@ -150,17 +163,20 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                                             val text = module.callAttr("scan_song", binaryData)
                                                 .toString()
                                             println(text)
-                                            val jsonObj = JSONObject(text).getJSONObject("result")
-                                            val song = Song(
-                                                id = 0,
-                                                artist = jsonObj.get("artist").toString(),
-                                                title = jsonObj.get("title").toString()
-                                            )
-                                            viewModel.setSong(song)
-                                            isFinished = true
+                                                val jsonObj = JSONObject(text).getJSONObject("result")
+                                                val song = Song(
+                                                    id = 0,
+                                                    artist = jsonObj.get("artist").toString(),
+                                                    title = jsonObj.get("title").toString()
+                                                )
+                                                viewModel.setSong(song)
+                                                isFinished = true
+
                                             // From python script we get a PyObject, which is converted to a string. Afterwards
                                             // its added to urlList, so that we can select the urls through indexing
                                         } catch (e: PyException) {
+                                            println(e.message + " ")
+                                        } catch (e: JSONException) {
                                             println(e.message + " ")
                                         }
                                         isRecording = false
