@@ -1,12 +1,15 @@
 package at.ac.tuwien.inso.ui.screens
 
+import BottomNavBar
 import android.Manifest
 import android.media.MediaRecorder
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
-import androidx.compose.material3.Button
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -18,6 +21,9 @@ import androidx.navigation.compose.rememberNavController
 import at.ac.tuwien.inso.model.Song
 import at.ac.tuwien.inso.ui.navigation.SoundViewScreens
 import at.ac.tuwien.inso.ui.theme.AppTheme
+import at.ac.tuwien.inso.ui.theme.md_theme_light_primary
+import at.ac.tuwien.inso.ui.theme.md_theme_light_primaryContainer
+import at.ac.tuwien.inso.ui.theme.md_theme_light_scrim
 import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
 import com.chaquo.python.PyException
 import com.chaquo.python.Python
@@ -31,7 +37,7 @@ import java.io.IOException
 import java.util.*
 
 
-@OptIn(ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewModel) {
@@ -44,7 +50,7 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
             Manifest.permission.RECORD_AUDIO,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE
-            )
+        )
     )
     LaunchedEffect(isFinished) {
         if(isFinished) {
@@ -52,84 +58,108 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
         }
     }
     if (allPermissionsState.allPermissionsGranted) {
-        Text("Permission Granted")
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .padding(20.dp)) {
-            Button(
-                onClick = {
-                    val file = File(context.filesDir.path, "/tmpaudio/")
-                    MediaRecorder(context).apply {
-                        setAudioSource(MediaRecorder.AudioSource.MIC)
-                        setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
 
-                        if (!file.exists()) {
-                            file.mkdirs()
-                        }
-                        val fileName = file.toString() + "/" + Date() + ".ogg"
-                        setOutputFile(fileName)
-                        println(fileName)
-                        setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
 
-                        try {
-                            prepare()
-                        } catch (_: IOException) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(text = "Song Search")
+                    },
+                    navigationIcon = {
 
-                        }
+                    },
+                    colors = TopAppBarDefaults.smallTopAppBarColors(
+                        containerColor = md_theme_light_primaryContainer,
+                        titleContentColor = md_theme_light_scrim,
+                    )
+                )
+            }, content = {
+                Column(
+                    modifier = Modifier
+                        .padding(it)
+                        .fillMaxSize()
+                        .background(md_theme_light_primary),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                )
+                {
+                    Button(
+                        modifier= Modifier.size(125.dp),
+                        shape = CircleShape,
+                        colors = ButtonDefaults.buttonColors(containerColor = md_theme_light_primaryContainer,
+                            contentColor = md_theme_light_scrim),
+                        onClick = {
+                            val file = File(context.filesDir.path, "/tmpaudio/")
+                            MediaRecorder(context).apply {
+                                setAudioSource(MediaRecorder.AudioSource.MIC)
+                                setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
 
-                        start()
-                        isRecording = true
-                        coroutineScope.launch {
-                            withContext(Dispatchers.IO) {
-                                delay(10000) // Record for 10 seconds
-                                stop()
-                                release()
-                                val fileRead = File(fileName)
-                                println("!!!!!!!!!!!!!!!!!!!!")
-                                println(fileRead)
-                                val binaryData = fileRead.readBytes()
-                                println(binaryData)
-                                if (!Python.isStarted()) {
-                                    Python.start(AndroidPlatform(context))
+                                if (!file.exists()) {
+                                    file.mkdirs()
                                 }
-                                val py = Python.getInstance()
-                                val module = py.getModule("image_generate")
+                                val fileName = file.toString() + "/" + Date() + ".ogg"
+                                setOutputFile(fileName)
+                                println(fileName)
+                                setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+
                                 try {
-                                    val text = module.callAttr("scan_song", binaryData)
-                                        .toString()
-                                    println(text)
-                                    val jsonObj = JSONObject(text).getJSONObject("result")
-                                    val song = Song(
-                                        id = 0,
-                                        artist = jsonObj.get("artist").toString(),
-                                        title = jsonObj.get("title").toString()
-                                    )
-                                    viewModel.setSong(song)
-                                    println(song)
-                                    isFinished = true
-                                    // From python script we get a PyObject, which is converted to a string. Afterwards
-                                    // its added to urlList, so that we can select the urls through indexing
-                                } catch (e: PyException) {
-                                    println(e.message + " ")
+                                    prepare()
+                                } catch (_: IOException) {
+
                                 }
-                                isRecording = false
-                                println(isFinished)
+
+                                start()
+                                isRecording = true
+                                coroutineScope.launch {
+                                    withContext(Dispatchers.IO) {
+                                        delay(10000) // Record for 10 seconds
+                                        stop()
+                                        release()
+                                        val fileRead = File(fileName)
+                                        println("!!!!!!!!!!!!!!!!!!!!")
+                                        println(fileRead)
+                                        val binaryData = fileRead.readBytes()
+                                        println(binaryData)
+                                        if (!Python.isStarted()) {
+                                            Python.start(AndroidPlatform(context))
+                                        }
+                                        val py = Python.getInstance()
+                                        val module = py.getModule("image_generate")
+                                        try {
+                                            val text = module.callAttr("scan_song", binaryData)
+                                                .toString()
+                                            println(text)
+                                            val jsonObj = JSONObject(text).getJSONObject("result")
+                                            val song = Song(
+                                                id = 0,
+                                                artist = jsonObj.get("artist").toString(),
+                                                title = jsonObj.get("title").toString()
+                                            )
+                                            viewModel.setSong(song)
+                                            println(song)
+                                            isFinished = true
+                                            // From python script we get a PyObject, which is converted to a string. Afterwards
+                                            // its added to urlList, so that we can select the urls through indexing
+                                        } catch (e: PyException) {
+                                            println(e.message + " ")
+                                        }
+                                        isRecording = false
+                                        println(isFinished)
+                                    }
+                                }
+
+
                             }
-                        }
 
-
+                        },
+                        enabled = !isRecording
+                    ) {
+                        Text("R")
                     }
+                }
+            },bottomBar = {BottomNavBar(navController = navController)})
 
-                },
-                enabled = !isRecording
-            ) {
-                Text("Record Audio")
-            }
-        }
         if (isRecording) {
             Box(modifier = Modifier.padding(8.dp)) {
                 Text("Recording audio...")
@@ -161,17 +191,11 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                 "Request permissions"
             }
 
-            Text(text = textToShow)
-            Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = { allPermissionsState.launchMultiplePermissionRequest() }) {
-                Text(buttonText)
-            }
         }
     }
-
-
-
 }
+
+
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Preview
