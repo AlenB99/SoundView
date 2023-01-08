@@ -49,7 +49,7 @@ fun ImageChooser(navController: NavController, prompt: String, viewModel: Genera
     LaunchedEffect(Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             val data = withContext(Dispatchers.IO) {
-                lyrics = getLyrics(py = Python.getInstance(), prompt = prompt)
+                val lyrics = getLyrics(py = Python.getInstance(), prompt = prompt)
                 pythonScriptMain(py = Python.getInstance(), prompt = lyrics)
             }
             results.value = data
@@ -201,16 +201,19 @@ suspend fun pythonScriptMain(py: Python, prompt: String): List<String> {
     return urlList;
 }
 suspend fun getLyrics(py: Python, prompt: String): String {
-    var urlList: List<String> = listOf("", "", "", "")
     val module = py.getModule("image_generate")
+    val lyrics = "No lyrics have been found"
     try {
+        println("TESTING LYRICS!!!!!!!!!!!!!!!!!!")
+        println(prompt)
         val lyrics = module.callAttr("get_song_lyrics", prompt)
             .toString()
-        
+        println(lyrics)
         return lyrics;
     } catch (e: PyException) {
         println(e.message + " ")
     }
+    println(lyrics)
     return lyrics;
 }
 @Composable
