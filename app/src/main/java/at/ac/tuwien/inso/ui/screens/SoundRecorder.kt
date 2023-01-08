@@ -108,10 +108,15 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                         colors = ButtonDefaults.buttonColors(containerColor = md_theme_light_primaryContainer,
                             contentColor = md_theme_light_scrim),
                         onClick = {
+                            var mediaRecorderx= MediaRecorder()
+                            val currentVersion = Build.VERSION.SDK_INT
+                            if (currentVersion >= Build.VERSION_CODES.R) {
+                                var mediaRecordex= MediaRecorder(context)
+                            }
                             showRecording.value = true
                             showFailed.value = false
                             val file = File(context.filesDir.path, "/tmpaudio/")
-                            MediaRecorder().apply {
+                            mediaRecorderx.apply {
                                 setAudioSource(MediaRecorder.AudioSource.MIC)
                                 setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
 
