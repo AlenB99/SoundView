@@ -2,6 +2,7 @@ package at.ac.tuwien.inso.ui.screens
 
 import BottomNavBar
 import android.Manifest
+import android.app.Dialog
 import android.media.MediaRecorder
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import at.ac.tuwien.inso.R
 import at.ac.tuwien.inso.model.Song
 import at.ac.tuwien.inso.ui.navigation.SoundViewScreens
 import at.ac.tuwien.inso.ui.theme.AppTheme
@@ -30,6 +32,7 @@ import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.google.accompanist.permissions.*
 import kotlinx.coroutines.*
+import org.json.JSONException
 import org.json.JSONObject
 import org.koin.androidx.compose.getViewModel
 import java.io.File
@@ -42,6 +45,7 @@ import java.util.*
 @Composable
 fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewModel) {
     var isRecording = false
+    var notFound = false
     var isFinished by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -84,14 +88,18 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                     horizontalAlignment = Alignment.CenterHorizontally
                 )
                 {
+                    val showRecording = remember { mutableStateOf(false) }
+                    val showFailed = remember { mutableStateOf(false) }
                     Button(
                         modifier= Modifier.size(125.dp),
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(containerColor = md_theme_light_primaryContainer,
                             contentColor = md_theme_light_scrim),
                         onClick = {
+                            showRecording.value = true
+                            showFailed.value = false
                             val file = File(context.filesDir.path, "/tmpaudio/")
-                            MediaRecorder(context).apply {
+                            MediaRecorder().apply {
                                 setAudioSource(MediaRecorder.AudioSource.MIC)
                                 setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
 
@@ -114,6 +122,7 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                                 coroutineScope.launch {
                                     withContext(Dispatchers.IO) {
                                         delay(10000) // Record for 10 seconds
+                                        showRecording.value= false
                                         stop()
                                         release()
                                         val fileRead = File(fileName)
@@ -130,7 +139,11 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                                             val text = module.callAttr("scan_song", binaryData)
                                                 .toString()
                                             println(text)
+                                            val textstring = "\"{”+ status” :”success”,”result”:null}\""
+                                            println(text.length)
+
                                             val jsonObj = JSONObject(text).getJSONObject("result")
+                                            println(jsonObj)
                                             val song = Song(
                                                 id = 0,
                                                 artist = jsonObj.get("artist").toString(),
@@ -139,10 +152,15 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                                             viewModel.setSong(song)
                                             println(song)
                                             isFinished = true
+
+
+
                                             // From python script we get a PyObject, which is converted to a string. Afterwards
                                             // its added to urlList, so that we can select the urls through indexing
-                                        } catch (e: PyException) {
+                                        } catch (e: JSONException) {
                                             println(e.message + " ")
+                                            showFailed.value= true
+                                            println("Song not found ")
                                         }
                                         isRecording = false
                                         println(isFinished)
@@ -157,14 +175,17 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                     ) {
                         Text("R")
                     }
+                    if (showRecording.value) {
+                        Text("Searching...")
+                    }
+                    if (showFailed.value) {
+                        Text("Could not find the song. Please try again.")
+                    }
+
                 }
             },bottomBar = {BottomNavBar(navController = navController)})
 
-        if (isRecording) {
-            Box(modifier = Modifier.padding(8.dp)) {
-                Text("Recording audio...")
-            }
-        }
+
     }
     else {
         Column {
