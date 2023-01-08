@@ -94,7 +94,6 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
                     var currentRotation by remember { mutableStateOf(0f) }
 
                     val rotation = remember { Animatable(currentRotation) }
-
                     LaunchedEffect(isRecording){
 
                         if(isRecording){
@@ -114,7 +113,6 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
                         }
 
                     }
-
                     Button(
                         modifier= Modifier
                             .size(125.dp)
@@ -149,8 +147,11 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
 
                                 start()
                                 isRecording = true
+
                                 coroutineScope.launch {
                                     withContext(Dispatchers.IO) {
+
+
                                         delay(10000) // Record for 10 seconds
                                         stop()
                                         release()
@@ -164,7 +165,6 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
                                         try {
                                             val text = module.callAttr("scan_song", binaryData)
                                                 .toString()
-
                                             val jsonObj = JSONObject(text).getJSONObject("result")
                                             val song = Song(
                                                 id = randomUUID().toString(),
