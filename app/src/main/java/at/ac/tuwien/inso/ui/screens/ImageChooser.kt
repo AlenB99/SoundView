@@ -163,9 +163,9 @@ fun ImageChooser(navController: NavController, prompt: String, viewModel: Genera
                         )
                     }
                     Text(text = "Choose one to Download!", style = MaterialTheme.typography.caption)
-                    SongTitle(name = "world")
-                    Artist(name = "world")
-                    Keywords(name = "world")
+                    SongTitle(name = viewModel.song.value!!.title)
+                    Artist(name = viewModel.song.value!!.artist)
+                    Keywords(name = viewModel.prompt.value!!)
                 }
             }
         )
@@ -183,7 +183,8 @@ suspend fun pythonScriptMain(py: Python, prompt: String): List<String> {
     var urlList: List<String> = listOf("", "", "", "")
     val module = py.getModule("image_generate")
     try {
-        val url = module.callAttr("image_generate", prompt)
+        val url = module.callAttr("image_generate", prompt + "as an song album cover " +
+                "but without text")
             .toString()
         urlList = url.split(",").map {
             it.trim()
@@ -201,11 +202,11 @@ suspend fun pythonScriptMain(py: Python, prompt: String): List<String> {
 
 @Composable
     fun SongTitle(name: String) {
-        Text(text = "Hello, $name!", style = MaterialTheme.typography.h3)
+        Text(text = name, style = MaterialTheme.typography.h3)
     }
     @Composable
     fun Artist(name: String) {
-        Text(text = "Hello, $name!", style = MaterialTheme.typography.body1, textAlign = TextAlign.Start)
+        Text(text = name, style = MaterialTheme.typography.body1, textAlign = TextAlign.Start)
     }
     @Composable
     fun Keywords(name: String) {

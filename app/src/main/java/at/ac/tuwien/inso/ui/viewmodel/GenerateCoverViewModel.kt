@@ -3,6 +3,7 @@ package at.ac.tuwien.inso.ui.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import at.ac.tuwien.inso.model.Song
 
 class GenerateCoverViewModel : ViewModel() {
     private var _prompt = MutableLiveData<String>()
@@ -13,6 +14,9 @@ class GenerateCoverViewModel : ViewModel() {
 
     private var _imageurl = MutableLiveData<String>()
     val imageurl: LiveData<String> = _imageurl
+
+    private var _song = MutableLiveData<Song>()
+    val song: LiveData<Song> = _song
 
     fun setPrompt(prompt: String) {
         _prompt.value = prompt
@@ -25,5 +29,9 @@ class GenerateCoverViewModel : ViewModel() {
 
     fun setImageurl(n: Int) {
         _imageurl.value = _imageurls.value?.get(n)
+    }
+
+    fun setSong(song: Song) {
+        _song.postValue(song)
     }
 }

@@ -1,6 +1,8 @@
 import openai
 import azapi
+import requests
 import RAKE
+import base64
 import nltk
 from nltk.corpus import stopwords
 
@@ -61,15 +63,13 @@ def nlp_on_lyrics(lyrics):
 
 def scan_song(binary_file):
     data = {
-    'api_token': '1ec6b173591049368d609392d7a2a5c5' #valid until 18th of January
+    'api_token': '1ec6b173591049368d609392d7a2a5c5', #valid until 18th of January
+    'return': 'apple_music,spotify'
     }
+    btfile = bytes(binary_file)
+
     files = {
-    'file': binary_file,
+    'file': btfile,
     }
-    result = requests.post('https://api.audd.io/recognizeWithOffset/', data=data, files=files)
-    songtext= json.loads(result.text)
-    try:
-        songname = songtext["result"]["artist"] + " - " + songtext["result"]["title"] 
-        return songname
-    except:
-        return "Could not find song"
+    result = requests.post('https://api.audd.io/', data=data, files=files)
+    return result.text

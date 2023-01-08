@@ -1,76 +1,57 @@
 package at.ac.tuwien.inso.ui.screens
 
-<<<<<<< Updated upstream
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-=======
 import BottomNavBar
 import android.Manifest
+import android.app.Dialog
 import android.media.MediaRecorder
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material3.*
-
->>>>>>> Stashed changes
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-<<<<<<< Updated upstream
-=======
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.sp
->>>>>>> Stashed changes
+import androidx.compose.ui.draw.rotate
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import at.ac.tuwien.inso.R
+import at.ac.tuwien.inso.model.Song
+import at.ac.tuwien.inso.ui.components.SongCard
 import at.ac.tuwien.inso.ui.navigation.SoundViewScreens
-import at.ac.tuwien.inso.ui.theme.*
+import at.ac.tuwien.inso.ui.theme.AppTheme
+import at.ac.tuwien.inso.ui.theme.md_theme_light_primary
+import at.ac.tuwien.inso.ui.theme.md_theme_light_primaryContainer
+import at.ac.tuwien.inso.ui.theme.md_theme_light_scrim
 import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
+import com.chaquo.python.PyException
+import com.chaquo.python.Python
+import com.chaquo.python.android.AndroidPlatform
+import com.google.accompanist.permissions.*
+import kotlinx.coroutines.*
+import org.json.JSONException
+import org.json.JSONObject
 import org.koin.androidx.compose.getViewModel
-import org.koin.androidx.viewmodel.ext.android.getViewModel
+import java.io.File
+import java.io.IOException
+import java.util.*
 
-<<<<<<< Updated upstream
-@Composable
-fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewModel) {
-    AppTheme {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            Button(
-                onClick = {
-                    navController.navigate(route = SoundViewScreens.ImageGenerateDevToolScreen.route)
-                          },
-                // Uses ButtonDefaults.ContentPadding by default
-                contentPadding = PaddingValues(
-                    start = 20.dp,
-                    top = 12.dp,
-                    end = 20.dp,
-                    bottom = 12.dp
-                )
-            ) {
-                // Inner content including an icon and a text label
-                Text("Record Sound")
-=======
 
 @OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewModel) {
-    var isRecording = false
+    var isRecording by remember { mutableStateOf(false) }
     var isFinished by remember { mutableStateOf(false) }
+    var error = ""
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     val allPermissionsState = rememberMultiplePermissionsState(
@@ -78,16 +59,15 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
             Manifest.permission.RECORD_AUDIO,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE
-            )
+        )
     )
     LaunchedEffect(isFinished) {
         if(isFinished) {
+
             navController.navigate(route = SoundViewScreens.ImageGenerateDevToolScreen.route)
         }
     }
     if (allPermissionsState.allPermissionsGranted) {
-
-
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -102,7 +82,8 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                         titleContentColor = md_theme_light_scrim,
                     )
                 )
-            }, content = {
+            }, content =
+            {
                 Column(
                     modifier = Modifier
                         .padding(it)
@@ -112,14 +93,45 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                     horizontalAlignment = Alignment.CenterHorizontally
                 )
                 {
+                    var currentRotation by remember { mutableStateOf(0f) }
+
+                    val rotation = remember { Animatable(currentRotation) }
+
+                    LaunchedEffect(isRecording){
+
+                        if(isRecording){
+                            rotation.animateTo(
+                                targetValue = currentRotation + 360f,
+                                animationSpec = infiniteRepeatable(
+                                    animation = tween(3000, easing = LinearEasing),
+                                    repeatMode = RepeatMode.Restart
+                                )
+                            )
+
+                            {
+                                currentRotation = value
+                            }
+                        }else{
+                            currentRotation = 0f
+                        }
+
+                    }
+
                     Button(
-                        modifier= Modifier.size(125.dp),
+                        modifier= Modifier.size(125.dp)
+                            .rotate(currentRotation),
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(containerColor = md_theme_light_primaryContainer,
                             contentColor = md_theme_light_scrim),
                         onClick = {
+                            error = ""
+                            var mediaRecorderx= MediaRecorder()
+                            val currentVersion = Build.VERSION.SDK_INT
+                            if (currentVersion >= Build.VERSION_CODES.R) {
+                                mediaRecorderx = MediaRecorder(context)
+                            }
                             val file = File(context.filesDir.path, "/tmpaudio/")
-                            MediaRecorder(context).apply {
+                            mediaRecorderx.apply {
                                 setAudioSource(MediaRecorder.AudioSource.MIC)
                                 setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
 
@@ -145,10 +157,7 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                                         stop()
                                         release()
                                         val fileRead = File(fileName)
-                                        println("!!!!!!!!!!!!!!!!!!!!")
-                                        println(fileRead)
                                         val binaryData = fileRead.readBytes()
-                                        println(binaryData)
                                         if (!Python.isStarted()) {
                                             Python.start(AndroidPlatform(context))
                                         }
@@ -158,22 +167,34 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                                             val text = module.callAttr("scan_song", binaryData)
                                                 .toString()
                                             println(text)
+                                            val textstring = "\"{”+ status” :”success”,”result”:null}\""
+                                            println(text.length)
+
                                             val jsonObj = JSONObject(text).getJSONObject("result")
+                                            println(jsonObj)
                                             val song = Song(
                                                 id = 0,
                                                 artist = jsonObj.get("artist").toString(),
                                                 title = jsonObj.get("title").toString()
                                             )
                                             viewModel.setSong(song)
-                                            println(song)
                                             isFinished = true
+
+
+
                                             // From python script we get a PyObject, which is converted to a string. Afterwards
                                             // its added to urlList, so that we can select the urls through indexing
-                                        } catch (e: PyException) {
+                                        } catch (e: JSONException) {
                                             println(e.message + " ")
+                                            error = "Could not find the song. Please try again."
+                                            currentRotation = 0f
+                                        }catch (e: PyException) {
+                                            println(e.message + " ")
+                                            error = "Network Error!"
+                                            currentRotation = 0f
                                         }
                                         isRecording = false
-                                        println(isFinished)
+                                        currentRotation = 0f
                                     }
                                 }
 
@@ -183,17 +204,20 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                         },
                         enabled = !isRecording
                     ) {
-                        Text("R")
+                        Icon(Icons.Rounded.MusicNote , contentDescription = "Localized description")
                     }
-                }
-            },bottomBar = {BottomNavBar(navController = navController)})
+                    Spacer(modifier = Modifier.size(32.dp))
+                    if (isRecording) {
+                        Text("Searching...")
+                    }
 
-            if (isRecording) {
-                Box(modifier = Modifier.padding(8.dp)) {
-                    Text("Recording audio...")
+                    Text(error)
                 }
-            }
-        }
+            },
+            bottomBar = {BottomNavBar(navController = navController)})
+
+
+    }
     else {
         Column {
             val allPermissionsRevoked =
@@ -217,7 +241,11 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                 "Allow Permissions"
             } else {
                 "Request permissions"
->>>>>>> Stashed changes
+            }
+            Text(text = textToShow)
+            Spacer(modifier = Modifier.height(8.dp))
+            Button(onClick = { allPermissionsState.launchMultiplePermissionRequest() }) {
+                Text(buttonText)
             }
 
         }
@@ -225,15 +253,16 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
 }
 
 
-@Preview(showBackground = true, device = Devices.PIXEL_3A)
+
+@RequiresApi(Build.VERSION_CODES.S)
+@Preview
 @Composable
-fun PreviewSoundRecorder() {
+fun PreviewAudioRecorder() {
     AppTheme {
-        ImageGeneratorDevTool(
+        SoundRecorder(
             navController = rememberNavController(),
             viewModel = getViewModel()
         )
     }
 }
-
 
