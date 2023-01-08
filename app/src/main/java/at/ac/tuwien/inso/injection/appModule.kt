@@ -2,7 +2,9 @@ package at.ac.tuwien.inso.injection
 
 import androidx.room.Room
 import at.ac.tuwien.inso.App
-import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
+import at.ac.tuwien.inso.persistance.database.AppDatabase
+import at.ac.tuwien.inso.repository.SongRepository
+import at.ac.tuwien.inso.ui.viewmodel.SongViewModel
 
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -22,7 +24,7 @@ val appModule = module {
     single { androidApplication() as App }
 
     // Provide the Room Database as a Singleton
-    /*single {
+    single {
         Room.databaseBuilder(
             get<App>(),
             AppDatabase::class.java, "my_database"
@@ -30,11 +32,11 @@ val appModule = module {
     }
 
     // Provide the Room Friend DAO as a Singleton
-    single { get<AppDatabase>().friendDao() }
+    single { get<AppDatabase>().songDao() }
 
     // Provide the Friend Repository as a Singleton
-    single { FriendRepository(get()) }
-*/
+    single { SongRepository(get()) }
+
     // Provide the MainViewModel
-    viewModel { GenerateCoverViewModel() }
+    viewModel { SongViewModel(get()) }
 }
