@@ -49,7 +49,8 @@ fun ImageChooser(navController: NavController, prompt: String, viewModel: Genera
     LaunchedEffect(Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             val data = withContext(Dispatchers.IO) {
-                pythonScriptMain(py = Python.getInstance(), prompt = prompt)
+                lyrics = getLyrics(py = Python.getInstance(), prompt = prompt)
+                pythonScriptMain(py = Python.getInstance(), prompt = lyrics)
             }
             results.value = data
         }
@@ -183,7 +184,7 @@ suspend fun pythonScriptMain(py: Python, prompt: String): List<String> {
     var urlList: List<String> = listOf("", "", "", "")
     val module = py.getModule("image_generate")
     try {
-        val url = module.callAttr("image_generate", prompt + "as an song album cover " +
+        val url = module.callAttr("image_generate", prompt + "as a song album cover " +
                 "but without text")
             .toString()
         urlList = url.split(",").map {
@@ -199,7 +200,19 @@ suspend fun pythonScriptMain(py: Python, prompt: String): List<String> {
     }
     return urlList;
 }
-
+suspend fun getLyrics(py: Python, prompt: String): String {
+    var urlList: List<String> = listOf("", "", "", "")
+    val module = py.getModule("image_generate")
+    try {
+        val lyrics = module.callAttr("get_song_lyrics", prompt)
+            .toString()
+        
+        return lyrics;
+    } catch (e: PyException) {
+        println(e.message + " ")
+    }
+    return lyrics;
+}
 @Composable
     fun SongTitle(name: String) {
         Text(text = name, style = MaterialTheme.typography.h3)
