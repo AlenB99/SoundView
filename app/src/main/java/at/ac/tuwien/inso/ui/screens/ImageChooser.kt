@@ -247,7 +247,7 @@ suspend fun applyNLP(py: Python, lyrics: String): String {
     }
     @Composable
     fun Keywords(name: String) {
-        Text(text = "Hello, $name!", style = MaterialTheme.typography.caption)
+        Text(text = "$name", style = MaterialTheme.typography.caption)
     }
 
 
