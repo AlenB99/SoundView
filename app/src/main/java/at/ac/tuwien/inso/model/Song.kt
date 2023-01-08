@@ -19,7 +19,7 @@ data class Song(
 
     @PrimaryKey
     @ColumnInfo(name = COLUMN_SONG_ID)
-    val id: Int,
+    val id: String,
 
     @ColumnInfo(name = COLUMN_SONG_TITLE)
     var title: String,

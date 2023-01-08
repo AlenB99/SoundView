@@ -2,7 +2,6 @@ package at.ac.tuwien.inso.ui.screens
 
 import BottomNavBar
 import android.Manifest
-import android.app.Dialog
 import android.media.MediaRecorder
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -23,15 +22,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.rotate
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import at.ac.tuwien.inso.R
 import at.ac.tuwien.inso.model.Song
-import at.ac.tuwien.inso.ui.components.SongCard
 import at.ac.tuwien.inso.ui.navigation.SoundViewScreens
 import at.ac.tuwien.inso.ui.theme.AppTheme
 import at.ac.tuwien.inso.ui.theme.md_theme_light_primary
 import at.ac.tuwien.inso.ui.theme.md_theme_light_primaryContainer
 import at.ac.tuwien.inso.ui.theme.md_theme_light_scrim
-import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
+import at.ac.tuwien.inso.ui.viewmodel.SongViewModel
 import com.chaquo.python.PyException
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
@@ -43,12 +40,13 @@ import org.koin.androidx.compose.getViewModel
 import java.io.File
 import java.io.IOException
 import java.util.*
+import java.util.UUID.randomUUID
 
 
 @OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewModel) {
+fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
     var isRecording by remember { mutableStateOf(false) }
     var isFinished by remember { mutableStateOf(false) }
     var error = ""
@@ -118,7 +116,8 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                     }
 
                     Button(
-                        modifier= Modifier.size(125.dp)
+                        modifier= Modifier
+                            .size(125.dp)
                             .rotate(currentRotation),
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(containerColor = md_theme_light_primaryContainer,
@@ -140,7 +139,6 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                                 }
                                 val fileName = file.toString() + "/" + Date() + ".ogg"
                                 setOutputFile(fileName)
-                                println(fileName)
                                 setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
 
                                 try {
@@ -166,17 +164,17 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                                         try {
                                             val text = module.callAttr("scan_song", binaryData)
                                                 .toString()
-                                            println(text)
-                                            val textstring = "\"{”+ status” :”success”,”result”:null}\""
-                                            println(text.length)
 
                                             val jsonObj = JSONObject(text).getJSONObject("result")
-                                            println(jsonObj)
                                             val song = Song(
-                                                id = 0,
+                                                id = randomUUID().toString(),
                                                 artist = jsonObj.get("artist").toString(),
                                                 title = jsonObj.get("title").toString()
                                             )
+                                            viewModel.insertSong(song)
+
+
+
                                             viewModel.setSong(song)
                                             isFinished = true
 
@@ -185,11 +183,11 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                                             // From python script we get a PyObject, which is converted to a string. Afterwards
                                             // its added to urlList, so that we can select the urls through indexing
                                         } catch (e: JSONException) {
-                                            println(e.message + " ")
+                                            // println(e.message + " ") #TODO LOG
                                             error = "Could not find the song. Please try again."
                                             currentRotation = 0f
                                         }catch (e: PyException) {
-                                            println(e.message + " ")
+                                            //println(e.message + " ") #TODO LOG
                                             error = "Network Error!"
                                             currentRotation = 0f
                                         }

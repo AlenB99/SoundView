@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -15,17 +14,15 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import at.ac.tuwien.inso.model.Song
 import at.ac.tuwien.inso.ui.navigation.SoundViewScreens
-import at.ac.tuwien.inso.ui.screens.SoundRecorder
 import at.ac.tuwien.inso.ui.theme.AppTheme
-import at.ac.tuwien.inso.ui.theme.md_theme_dark_primaryContainer
 import at.ac.tuwien.inso.ui.theme.md_theme_light_outlineVariant
 import at.ac.tuwien.inso.ui.theme.md_theme_light_primaryContainer
-import at.ac.tuwien.inso.ui.viewmodel.GenerateCoverViewModel
+import at.ac.tuwien.inso.ui.viewmodel.SongViewModel
 import org.koin.androidx.compose.getViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SongCard(song: Song, navController: NavController, viewModel: GenerateCoverViewModel) {
+fun SongCard(song: Song, navController: NavController, viewModel: SongViewModel) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -64,7 +61,7 @@ fun SongCard(song: Song, navController: NavController, viewModel: GenerateCoverV
 fun PreviewSongCard() {
     AppTheme {
         SongCard(
-            song = Song(id=0, title = "The Fall", artist = "Eminem"),
+            song = Song(id="TEST", title = "The Fall", artist = "Eminem"),
             navController = rememberNavController(),
             viewModel = getViewModel()
         )
