@@ -45,7 +45,7 @@ fun ImageChooser(navController: NavController, prompt: String, viewModel: Genera
     }
 
     val results = remember { mutableStateOf<List<String>?>(null) }
-
+    val prompt = (viewModel.song.value?.artist ?: "unknown") + " - " + (viewModel.song.value?.title ?: "unknown")
     LaunchedEffect(Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             val data = withContext(Dispatchers.IO) {

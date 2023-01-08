@@ -29,7 +29,7 @@ def get_song_lyrics(x):
     API.artist = artist_name
     API.title = song_name
 
-    API.getLyrics(save=True, ext='lrc')
+    API.getLyrics(ext='lrc')
 
     return API.lyrics.replace("\n"," ")
 
