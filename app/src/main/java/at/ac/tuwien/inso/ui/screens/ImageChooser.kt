@@ -50,7 +50,8 @@ fun ImageChooser(navController: NavController, prompt: String, viewModel: Genera
         CoroutineScope(Dispatchers.IO).launch {
             val data = withContext(Dispatchers.IO) {
                 val lyrics = getLyrics(py = Python.getInstance(), prompt = prompt)
-                pythonScriptMain(py = Python.getInstance(), prompt = lyrics)
+                val keywords = applyNLP(py = Python.getInstance(), lyrics = lyrics)
+                pythonScriptMain(py = Python.getInstance(), prompt = keywords)
             }
             results.value = data
         }
@@ -184,8 +185,8 @@ suspend fun pythonScriptMain(py: Python, prompt: String): List<String> {
     var urlList: List<String> = listOf("", "", "", "")
     val module = py.getModule("image_generate")
     try {
-        val url = module.callAttr("image_generate", prompt + "as a song album cover " +
-                "but without text")
+        val url = module.callAttr("image_generate", prompt  +
+                "without text")
             .toString()
         urlList = url.split(",").map {
             it.trim()
@@ -215,6 +216,23 @@ suspend fun getLyrics(py: Python, prompt: String): String {
     }
     println(lyrics)
     return lyrics;
+}
+suspend fun applyNLP(py: Python, lyrics: String): String {
+    val module = py.getModule("image_generate")
+    val keywords = "No keywords have been found"
+    try {
+        println("TESTING NLP!!!!!!!!!!!!!!!!!!")
+        println(lyrics)
+        val keywords = module.callAttr("nlp_on_lyrics", lyrics)
+            .toString()
+        println("keywords")
+        println(keywords)
+        return keywords;
+    } catch (e: PyException) {
+        println(e.message + " ")
+    }
+    println(keywords)
+    return keywords;
 }
 @Composable
     fun SongTitle(name: String) {
