@@ -6,10 +6,13 @@ import android.app.Dialog
 import android.media.MediaRecorder
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -17,10 +20,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.rotate
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import at.ac.tuwien.inso.R
 import at.ac.tuwien.inso.model.Song
+import at.ac.tuwien.inso.ui.components.SongCard
 import at.ac.tuwien.inso.ui.navigation.SoundViewScreens
 import at.ac.tuwien.inso.ui.theme.AppTheme
 import at.ac.tuwien.inso.ui.theme.md_theme_light_primary
@@ -58,6 +63,7 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
     )
     LaunchedEffect(isFinished) {
         if(isFinished) {
+
             navController.navigate(route = SoundViewScreens.ImageGenerateDevToolScreen.route)
         }
     }
@@ -78,7 +84,8 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                         titleContentColor = md_theme_light_scrim,
                     )
                 )
-            }, content = {
+            }, content =
+            {
                 Column(
                     modifier = Modifier
                         .padding(it)
@@ -90,8 +97,13 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                 {
                     val showRecording = remember { mutableStateOf(false) }
                     val showFailed = remember { mutableStateOf(false) }
+                    var currentRotation by remember { mutableStateOf(0f) }
+
+                    val rotation = remember { Animatable(currentRotation) }
+
                     Button(
-                        modifier= Modifier.size(125.dp),
+                        modifier= Modifier.size(125.dp)
+                            .rotate(currentRotation),
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(containerColor = md_theme_light_primaryContainer,
                             contentColor = md_theme_light_scrim),
@@ -121,15 +133,22 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                                 isRecording = true
                                 coroutineScope.launch {
                                     withContext(Dispatchers.IO) {
+                                        coroutineScope.launch { rotation.animateTo(
+                                            targetValue = currentRotation + 360f,
+                                            animationSpec = infiniteRepeatable(
+                                                animation = tween(3000, easing = LinearEasing),
+                                                repeatMode = RepeatMode.Restart
+                                            )
+                                        ) {
+                                            currentRotation = value
+                                        }  }
+
                                         delay(10000) // Record for 10 seconds
                                         showRecording.value= false
                                         stop()
                                         release()
                                         val fileRead = File(fileName)
-                                        println("!!!!!!!!!!!!!!!!!!!!")
-                                        println(fileRead)
                                         val binaryData = fileRead.readBytes()
-                                        println(binaryData)
                                         if (!Python.isStarted()) {
                                             Python.start(AndroidPlatform(context))
                                         }
@@ -150,7 +169,6 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                                                 title = jsonObj.get("title").toString()
                                             )
                                             viewModel.setSong(song)
-                                            println(song)
                                             isFinished = true
 
 
@@ -163,7 +181,6 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                                             println("Song not found ")
                                         }
                                         isRecording = false
-                                        println(isFinished)
                                     }
                                 }
 
@@ -173,7 +190,7 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                         },
                         enabled = !isRecording
                     ) {
-                        Text("R")
+                        Icon(Icons.Rounded.MusicNote , contentDescription = "Localized description")
                     }
                     if (showRecording.value) {
                         Text("Searching...")
@@ -183,7 +200,8 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                     }
 
                 }
-            },bottomBar = {BottomNavBar(navController = navController)})
+            },
+            bottomBar = {BottomNavBar(navController = navController)})
 
 
     }
