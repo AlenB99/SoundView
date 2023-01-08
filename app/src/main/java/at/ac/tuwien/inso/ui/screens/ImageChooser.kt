@@ -45,11 +45,13 @@ fun ImageChooser(navController: NavController, prompt: String, viewModel: Genera
     }
 
     val results = remember { mutableStateOf<List<String>?>(null) }
-
+    val prompt = (viewModel.song.value?.artist ?: "unknown") + " - " + (viewModel.song.value?.title ?: "unknown")
     LaunchedEffect(Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             val data = withContext(Dispatchers.IO) {
-                pythonScriptMain(py = Python.getInstance(), prompt = prompt)
+                val lyrics = getLyrics(py = Python.getInstance(), prompt = prompt)
+                val keywords = applyNLP(py = Python.getInstance(), lyrics = lyrics)
+                pythonScriptMain(py = Python.getInstance(), prompt = keywords)
             }
             results.value = data
         }
@@ -183,8 +185,8 @@ suspend fun pythonScriptMain(py: Python, prompt: String): List<String> {
     var urlList: List<String> = listOf("", "", "", "")
     val module = py.getModule("image_generate")
     try {
-        val url = module.callAttr("image_generate", prompt + "as an song album cover " +
-                "but without text")
+        val url = module.callAttr("image_generate", prompt  +
+                "without text")
             .toString()
         urlList = url.split(",").map {
             it.trim()
@@ -199,7 +201,39 @@ suspend fun pythonScriptMain(py: Python, prompt: String): List<String> {
     }
     return urlList;
 }
-
+suspend fun getLyrics(py: Python, prompt: String): String {
+    val module = py.getModule("image_generate")
+    val lyrics = "No lyrics have been found"
+    try {
+        println("TESTING LYRICS!!!!!!!!!!!!!!!!!!")
+        println(prompt)
+        val lyrics = module.callAttr("get_song_lyrics", prompt)
+            .toString()
+        println(lyrics)
+        return lyrics;
+    } catch (e: PyException) {
+        println(e.message + " ")
+    }
+    println(lyrics)
+    return lyrics;
+}
+suspend fun applyNLP(py: Python, lyrics: String): String {
+    val module = py.getModule("image_generate")
+    val keywords = "No keywords have been found"
+    try {
+        println("TESTING NLP!!!!!!!!!!!!!!!!!!")
+        println(lyrics)
+        val keywords = module.callAttr("nlp_on_lyrics", lyrics)
+            .toString()
+        println("keywords")
+        println(keywords)
+        return keywords;
+    } catch (e: PyException) {
+        println(e.message + " ")
+    }
+    println(keywords)
+    return keywords;
+}
 @Composable
     fun SongTitle(name: String) {
         Text(text = name, style = MaterialTheme.typography.h3)
