@@ -96,7 +96,6 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                     var currentRotation by remember { mutableStateOf(0f) }
 
                     val rotation = remember { Animatable(currentRotation) }
-
                     LaunchedEffect(isRecording){
 
                         if(isRecording){
@@ -116,9 +115,9 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                         }
 
                     }
-
                     Button(
-                        modifier= Modifier.size(125.dp)
+                        modifier= Modifier
+                            .size(125.dp)
                             .rotate(currentRotation),
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(containerColor = md_theme_light_primaryContainer,
@@ -151,8 +150,11 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
 
                                 start()
                                 isRecording = true
+
                                 coroutineScope.launch {
                                     withContext(Dispatchers.IO) {
+
+
                                         delay(10000) // Record for 10 seconds
                                         stop()
                                         release()
@@ -166,10 +168,6 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                                         try {
                                             val text = module.callAttr("scan_song", binaryData)
                                                 .toString()
-                                            println(text)
-                                            val textstring = "\"{”+ status” :”success”,”result”:null}\""
-                                            println(text.length)
-
                                             val jsonObj = JSONObject(text).getJSONObject("result")
                                             println(jsonObj)
                                             val song = Song(
@@ -188,11 +186,7 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                                             println(e.message + " ")
                                             error = "Could not find the song. Please try again."
                                             currentRotation = 0f
-                                        }catch (e: PyException) {
-                                            println(e.message + " ")
-                                            error = "Network Error!"
-                                            currentRotation = 0f
-                                        }
+                                        
                                         isRecording = false
                                         currentRotation = 0f
                                     }
