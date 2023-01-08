@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.vector.VectorProperty
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import at.ac.tuwien.inso.R
@@ -98,15 +99,16 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                     val showRecording = remember { mutableStateOf(false) }
                     val showFailed = remember { mutableStateOf(false) }
                     var currentRotation by remember { mutableStateOf(0f) }
-
                     val rotation = remember { Animatable(currentRotation) }
-
+                    val defaultColor = ButtonDefaults.buttonColors(containerColor = md_theme_light_primaryContainer,
+                        contentColor = md_theme_light_scrim)
+                    var buttonColor = ButtonDefaults.buttonColors(containerColor = md_theme_light_primaryContainer,
+                        contentColor = md_theme_light_scrim)
                     Button(
                         modifier= Modifier.size(125.dp)
                             .rotate(currentRotation),
                         shape = CircleShape,
-                        colors = ButtonDefaults.buttonColors(containerColor = md_theme_light_primaryContainer,
-                            contentColor = md_theme_light_scrim),
+                        colors = buttonColor,
                         onClick = {
                             showRecording.value = true
                             showFailed.value = false
@@ -178,10 +180,21 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                                         } catch (e: JSONException) {
                                             println(e.message + " ")
                                             showFailed.value= true
-                                            println("Song not found ")
                                         }
-                                        isRecording = false
+
+                                        coroutineScope.launch { rotation.animateTo(
+                                            targetValue = 1f,
+                                            animationSpec = infiniteRepeatable(
+                                                animation = tween(1, easing = LinearEasing)
+
+                                            )
+
+                                        )
+                                        }
+                                        currentRotation = 0f
+                                        buttonColor=defaultColor
                                     }
+
                                 }
 
 
