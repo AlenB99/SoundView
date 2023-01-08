@@ -49,9 +49,9 @@ import java.util.*
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewModel) {
-    var isRecording = false
-    var notFound = false
+    var isRecording by remember { mutableStateOf(false) }
     var isFinished by remember { mutableStateOf(false) }
+    var error = ""
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     val allPermissionsState = rememberMultiplePermissionsState(
@@ -68,8 +68,6 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
         }
     }
     if (allPermissionsState.allPermissionsGranted) {
-
-
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -95,11 +93,29 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                     horizontalAlignment = Alignment.CenterHorizontally
                 )
                 {
-                    val showRecording = remember { mutableStateOf(false) }
-                    val showFailed = remember { mutableStateOf(false) }
                     var currentRotation by remember { mutableStateOf(0f) }
 
                     val rotation = remember { Animatable(currentRotation) }
+
+                    LaunchedEffect(isRecording){
+
+                        if(isRecording){
+                            rotation.animateTo(
+                                targetValue = currentRotation + 360f,
+                                animationSpec = infiniteRepeatable(
+                                    animation = tween(3000, easing = LinearEasing),
+                                    repeatMode = RepeatMode.Restart
+                                )
+                            )
+
+                            {
+                                currentRotation = value
+                            }
+                        }else{
+                            currentRotation = 0f
+                        }
+
+                    }
 
                     Button(
                         modifier= Modifier.size(125.dp)
@@ -108,13 +124,12 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                         colors = ButtonDefaults.buttonColors(containerColor = md_theme_light_primaryContainer,
                             contentColor = md_theme_light_scrim),
                         onClick = {
+                            error = ""
                             var mediaRecorderx= MediaRecorder()
                             val currentVersion = Build.VERSION.SDK_INT
                             if (currentVersion >= Build.VERSION_CODES.R) {
-                                var mediaRecordex= MediaRecorder(context)
+                                mediaRecorderx = MediaRecorder(context)
                             }
-                            showRecording.value = true
-                            showFailed.value = false
                             val file = File(context.filesDir.path, "/tmpaudio/")
                             mediaRecorderx.apply {
                                 setAudioSource(MediaRecorder.AudioSource.MIC)
@@ -138,18 +153,7 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                                 isRecording = true
                                 coroutineScope.launch {
                                     withContext(Dispatchers.IO) {
-                                        coroutineScope.launch { rotation.animateTo(
-                                            targetValue = currentRotation + 360f,
-                                            animationSpec = infiniteRepeatable(
-                                                animation = tween(3000, easing = LinearEasing),
-                                                repeatMode = RepeatMode.Restart
-                                            )
-                                        ) {
-                                            currentRotation = value
-                                        }  }
-
                                         delay(10000) // Record for 10 seconds
-                                        showRecording.value= false
                                         stop()
                                         release()
                                         val fileRead = File(fileName)
@@ -182,17 +186,12 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                                             // its added to urlList, so that we can select the urls through indexing
                                         } catch (e: JSONException) {
                                             println(e.message + " ")
-                                            showFailed.value= true
-                                            println("Song not found ")
-                                        }
-                                        coroutineScope.launch { rotation.animateTo(
-                                            targetValue = 1f,
-                                            animationSpec = infiniteRepeatable(
-                                                animation = tween(1, easing = LinearEasing)
-
-                                            )
-
-                                        )
+                                            error = "Could not find the song. Please try again."
+                                            currentRotation = 0f
+                                        }catch (e: PyException) {
+                                            println(e.message + " ")
+                                            error = "Network Error!"
+                                            currentRotation = 0f
                                         }
                                         isRecording = false
                                         currentRotation = 0f
@@ -207,13 +206,12 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                     ) {
                         Icon(Icons.Rounded.MusicNote , contentDescription = "Localized description")
                     }
-                    if (showRecording.value) {
+                    Spacer(modifier = Modifier.size(32.dp))
+                    if (isRecording) {
                         Text("Searching...")
                     }
-                    if (showFailed.value) {
-                        Text("Could not find the song. Please try again.")
-                    }
 
+                    Text(error)
                 }
             },
             bottomBar = {BottomNavBar(navController = navController)})
@@ -243,6 +241,11 @@ fun SoundRecorder(navController: NavController, viewModel: GenerateCoverViewMode
                 "Allow Permissions"
             } else {
                 "Request permissions"
+            }
+            Text(text = textToShow)
+            Spacer(modifier = Modifier.height(8.dp))
+            Button(onClick = { allPermissionsState.launchMultiplePermissionRequest() }) {
+                Text(buttonText)
             }
 
         }
