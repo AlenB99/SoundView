@@ -54,10 +54,10 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     val currentVersion = Build.VERSION.SDK_INT
-    
+
     // If android API is above 30, there is a bug where storage permissions are not asked.
     // See issue thread for example: https://github.com/xamarin/Essentials/issues/2041
-    allPermissionsState = if (currentVersion >= Build.VERSION_CODES.R) {
+    var allPermissionsState = if (currentVersion >= Build.VERSION_CODES.R) {
         rememberMultiplePermissionsState(
             listOf(
                 Manifest.permission.RECORD_AUDIO
