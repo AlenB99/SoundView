@@ -53,13 +53,33 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
     var error = ""
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
-    val allPermissionsState = rememberMultiplePermissionsState(
+    val currentVersion = Build.VERSION.SDK_INT
+
+
+    var allPermissionsState = rememberMultiplePermissionsState(
         listOf(
             Manifest.permission.RECORD_AUDIO,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE
         )
     )
+    // If android API is above 30, there is a bug where storage permissions are not asked.
+    // See issue thread for example: https://github.com/xamarin/Essentials/issues/2041
+    allPermissionsState = if (currentVersion >= Build.VERSION_CODES.R) {
+        rememberMultiplePermissionsState(
+            listOf(
+                Manifest.permission.RECORD_AUDIO
+            )
+        )
+    } else {
+        rememberMultiplePermissionsState(
+            listOf(
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+        )
+    }
     LaunchedEffect(isFinished) {
         if(isFinished) {
 
@@ -124,7 +144,6 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
                         onClick = {
                             error = ""
                             var mediaRecorderx= MediaRecorder()
-                            val currentVersion = Build.VERSION.SDK_INT
                             if (currentVersion >= Build.VERSION_CODES.R) {
                                 mediaRecorderx = MediaRecorder(context)
                             }
