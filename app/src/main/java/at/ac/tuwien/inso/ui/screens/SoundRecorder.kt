@@ -231,8 +231,7 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
                     var showPopup by remember { mutableStateOf(false) }
                     Button(
                         modifier= Modifier
-                            .size(129.dp)
-                            .rotate(currentRotation),
+                            .size(129.dp),
                         shape = RectangleShape,
                         colors = ButtonDefaults.buttonColors(containerColor = md_theme_light_primaryContainer,
                             contentColor = md_theme_light_scrim),
