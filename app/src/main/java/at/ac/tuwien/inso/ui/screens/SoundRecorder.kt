@@ -4,6 +4,7 @@ import BottomNavBar
 import android.Manifest
 import android.media.MediaRecorder
 import android.os.Build
+import android.text.InputType
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -21,6 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.input.KeyboardType.Companion.Text
+import androidx.compose.ui.window.Popup
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import at.ac.tuwien.inso.model.Song
@@ -222,7 +226,48 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
                     }
 
                     Text(error, color= Color.White)
+                    var text by remember { mutableStateOf("") }
+                    var showPopup by remember { mutableStateOf(false) }
+                    Button(
+                        modifier= Modifier
+                            .size(129.dp)
+                            .rotate(currentRotation),
+                        shape = RectangleShape,
+                        colors = ButtonDefaults.buttonColors(containerColor = md_theme_light_primaryContainer,
+                            contentColor = md_theme_light_scrim),
+                        onClick = {
+                            showPopup = true
+
+                        }
+                    ){
+                        Text("Manually enter keywords", color= Color.Black)
+                    }
+                    if (showPopup) {
+                        TextField(
+                            value = text,
+                            onValueChange = { newText ->
+                                text = newText
+                            }
+
+                        )
+                        Button(
+                            onClick = {
+                                val song = Song(
+                                    id = randomUUID().toString(),
+                                    artist = text.toString(),
+                                    title = text.toString()
+                                )
+                                viewModel.setSong(song)
+                                isFinished = true
+
+                            }
+                        ) {
+                            Text("Search", color= Color.Black)
+                        }
+                    }
                 }
+
+
             },
             bottomBar = {BottomNavBar(navController = navController)})
 
