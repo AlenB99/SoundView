@@ -42,24 +42,39 @@ fun ImageChooser(navController: NavController, prompt: String, viewModel: SongVi
     }
 
     val results = remember { mutableStateOf<List<String>?>(null) }
+    
     val prompt = (viewModel.song.value?.artist ?: "unknown") + " - " + (viewModel.song.value?.title ?: "unknown")
+    
     println("DATABASE:")
     for (item in songs) {
         println(item.id)
         println(item.title)
         println(item.artist)
     }
-    LaunchedEffect(Unit) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val data = withContext(Dispatchers.IO) {
-                val lyrics = getLyrics(py = Python.getInstance(), prompt = prompt)
-                val keywords = applyNLP(py = Python.getInstance(), lyrics = lyrics)
-                pythonScriptMain(py = Python.getInstance(), prompt = keywords)
+    if( viewModel.song.value?.artist !="SoundViewUser"){
+            val prompt = (viewModel.song.value?.artist ?: "unknown") + " - " + (viewModel.song.value?.title ?: "unknown")
+            LaunchedEffect(Unit) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val data = withContext(Dispatchers.IO) {
+                    val lyrics = getLyrics(py = Python.getInstance(), prompt = prompt)
+                    val keywords = applyNLP(py = Python.getInstance(), lyrics = lyrics)
+                    pythonScriptMain(py = Python.getInstance(), prompt = keywords)
+                }
+                results.value = data
             }
-            results.value = data
+        }
+    }else{
+        val prompt = (viewModel.song.value?.title ?: "unknown")
+        LaunchedEffect(Unit) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val data = withContext(Dispatchers.IO) {
+                    pythonScriptMain(py = Python.getInstance(), prompt)
+                }
+                results.value = data
+            }
         }
     }
-
+    
     if (results.value == null) {
         CircularProgressIndicator(color = Color.Black)
     } else {

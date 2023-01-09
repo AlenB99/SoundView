@@ -54,6 +54,7 @@ import java.util.UUID.randomUUID
 fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
     var isRecording by remember { mutableStateOf(false) }
     var isFinished by remember { mutableStateOf(false) }
+    var isManual by remember { mutableStateOf(false) }
     var error = ""
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -254,11 +255,12 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
                             onClick = {
                                 val song = Song(
                                     id = randomUUID().toString(),
-                                    artist = text.toString(),
+                                    artist = "SoundViewUser".toString(),
                                     title = text.toString()
                                 )
                                 viewModel.setSong(song)
                                 isFinished = true
+                                isManual = true
 
                             }
                         ) {
