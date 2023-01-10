@@ -41,7 +41,7 @@ def image_generate(x):
 def get_song_lyrics(x):
     artist_name= x.split("-")[0]
     song_name= x.split("-")[1]
-    API = azapi.AZlyrics("duckduckgo",accuracy=0.8)
+    API = azapi.AZlyrics("duckduckgo",accuracy=0.6)
     API.artist = artist_name
     API.title = song_name
 

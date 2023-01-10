@@ -42,6 +42,7 @@ fun LyricsKeywords(navController: NavController, viewModel: SongViewModel) {
     var lyrics by remember { mutableStateOf("Loading...") }
     var keywords by remember { mutableStateOf("") }
     var isFinished by remember { mutableStateOf(false) }
+    var isManual by remember { mutableStateOf(false) }
 
     LaunchedEffect(isFinished) {
         if(isFinished) {
@@ -86,36 +87,71 @@ fun LyricsKeywords(navController: NavController, viewModel: SongViewModel) {
                 }
 
                 Text(text = lyrics)
-                Text(text = keywords)
-                
-                var text = keywords
+                //Text(text = keywords)
+
+                val initialKeywords = keywords
                 TextField(
                     value = keywords,
                     onValueChange = { newText ->
                         keywords = newText
+                        if (keywords != initialKeywords){
+                            isManual = true
+                        }
                     }
 
                 )
-                Button(
-                    onClick = {
-                        val song = Song(
-                            id = UUID.randomUUID().toString(),
-                            artist = "SoundViewUser",
-                            title = text,
-                            image_1 = "",
-                            image_2 = "",
-                            image_3 = "",
-                            image_4 = "",
-                            keyPrompt = "",
-                        )
-                        viewModel.setSong(song)
-                        isFinished = true
-                        //isManual = true
+                if(isManual){
+                    Button(
+                        onClick = {
+                            val song = Song(
+                                id = UUID.randomUUID().toString(),
+                                artist = "SoundViewUser",
+                                title = keywords,
+                                image_1 = "",
+                                image_2 = "",
+                                image_3 = "",
+                                image_4 = "",
+                                keyPrompt = "",
+                            )
+                            viewModel.setSong(song)
+                            isFinished = true
+                            //isManual = true
 
+                        }
+                    ) {
+                        Text("Search1", color= Color.Black)
                     }
-                ) {
-                    Text("Search", color= Color.Black)
+
+                }else{
+                    Button(
+                        onClick = {
+                            val song = Song(
+                                id = UUID.randomUUID().toString(),
+                                artist = viewModel.song.value?.artist.toString(),
+                                title = viewModel.song.value?.title.toString(),
+                                image_1 = "",
+                                image_2 = "",
+                                image_3 = "",
+                                image_4 = "",
+                                keyPrompt = viewModel.song.value?.keyPrompt.toString(),
+                            )
+                            viewModel.setSong(song)
+                            isFinished = true
+                            //isManual = true
+
+                        }
+                    ) {
+                        Text("Search2", color= Color.Black)
+                    }
                 }
+
+
+
+
+
+
+
+
 
             }
         },
