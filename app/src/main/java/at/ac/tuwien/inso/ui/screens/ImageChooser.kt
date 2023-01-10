@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun ImageChooser(navController: NavController, prompt: String, viewModel: SongViewModel, songs: List<Song>) {
+fun ImageChooser(navController: NavController, prompt: String, viewModel: SongViewModel) {
     if (!Python.isStarted()) {
         Python.start(AndroidPlatform(LocalContext.current))
     }
@@ -45,12 +45,7 @@ fun ImageChooser(navController: NavController, prompt: String, viewModel: SongVi
     
     val prompt = (viewModel.song.value?.artist ?: "unknown") + " - " + (viewModel.song.value?.title ?: "unknown")
     
-    println("DATABASE:")
-    for (item in songs) {
-        println(item.id)
-        println(item.title)
-        println(item.artist)
-    }
+
     if( viewModel.song.value?.artist !="SoundViewUser"){
             val prompt = (viewModel.song.value?.artist ?: "unknown") + " - " + (viewModel.song.value?.title ?: "unknown")
             LaunchedEffect(Unit) {

@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import at.ac.tuwien.inso.ui.navigation.SoundViewScreens
 import at.ac.tuwien.inso.ui.theme.md_theme_light_onPrimaryContainer
 import at.ac.tuwien.inso.ui.theme.md_theme_light_primaryContainer
 
@@ -23,17 +24,17 @@ data class BottomNavItem(
 val bottomNavItems = listOf(
     BottomNavItem(
         name = "Song Search",
-        route = "home",
+        route = SoundViewScreens.SoundRecorderScreen.route,
         icon = Icons.Rounded.MusicNote,
     ),
     BottomNavItem(
         name = "Image History",
-        route = "add",
+        route = SoundViewScreens.ImageHistoryScreen.route,
         icon = Icons.Rounded.List,
     ),
     BottomNavItem(
         name = "Song History",
-        route = "settings",
+        route = SoundViewScreens.SongHistoryScreen.route,
         icon = Icons.Rounded.List,
     ),
 )

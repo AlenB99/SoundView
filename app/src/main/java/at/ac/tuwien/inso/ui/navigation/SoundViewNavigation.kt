@@ -9,10 +9,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import at.ac.tuwien.inso.ui.screens.ImageChooser
-import at.ac.tuwien.inso.ui.screens.ImageGeneratorDevTool
-import at.ac.tuwien.inso.ui.screens.ImageToStorage
-import at.ac.tuwien.inso.ui.screens.SoundRecorder
+import at.ac.tuwien.inso.ui.screens.*
 import at.ac.tuwien.inso.ui.viewmodel.SongViewModel
 
 
@@ -30,7 +27,6 @@ fun SoundViewNavigation(navHostController: NavHostController, viewModel: SongVie
     ) {
         composable(SoundViewScreens.ImageChooserScreen.route) {
         ImageChooser(
-            songs = songs,
             navController = navHostController,
             viewModel = viewModel,
             prompt = viewModel.prompt.value.toString()
@@ -46,6 +42,13 @@ fun SoundViewNavigation(navHostController: NavHostController, viewModel: SongVie
         }
         composable(SoundViewScreens.SoundRecorderScreen.route) {
             SoundRecorder(navController = navHostController, viewModel = viewModel)
+        }
+
+        composable(SoundViewScreens.SongHistoryScreen.route) {
+            SongHistory(navController = navHostController, viewModel = viewModel, songs = songs)
+        }
+        composable(SoundViewScreens.ImageHistoryScreen.route) {
+            ImageHistory(navController = navHostController, viewModel = viewModel, songs = songs)
         }
     }
 }
