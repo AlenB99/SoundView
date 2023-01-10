@@ -58,6 +58,7 @@ fun ImageChooser(navController: NavController, prompt: String, viewModel: SongVi
                 val data = withContext(Dispatchers.IO) {
                     val lyrics = getLyrics(py = Python.getInstance(), prompt = prompt)
                     val keywords = applyNLP(py = Python.getInstance(), lyrics = lyrics)
+                    viewModel.setKeywords(keywords)
                     pythonScriptMain(py = Python.getInstance(), prompt = keywords)
                 }
                 results.value = data
@@ -185,7 +186,7 @@ fun ImageChooser(navController: NavController, prompt: String, viewModel: SongVi
                     Text(text = "Choose one to Download!", style = MaterialTheme.typography.caption)
                     SongTitle(name = viewModel.song.value!!.title)
                     Artist(name = viewModel.song.value!!.artist)
-                    Keywords(name = viewModel.prompt.value!!)
+                    Keywords(name = "Keywords: " + viewModel.keywords.value!!)
                 }
             }
         )

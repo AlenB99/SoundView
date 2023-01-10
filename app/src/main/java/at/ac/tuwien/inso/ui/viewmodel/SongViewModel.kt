@@ -31,6 +31,9 @@ class SongViewModel(
     private var _song = MutableLiveData<Song>()
     val song: LiveData<Song> = _song
 
+    private var _keywords = MutableLiveData<String>()
+    val keywords: LiveData<String> = _keywords
+
     fun setPrompt(prompt: String) {
         _prompt.value = prompt
     }
@@ -46,6 +49,9 @@ class SongViewModel(
 
     fun setSong(song: Song) {
         _song.postValue(song)
+    }
+    fun setKeywords(keywords: String) {
+        _keywords.postValue(keywords)
     }
 
     /**
