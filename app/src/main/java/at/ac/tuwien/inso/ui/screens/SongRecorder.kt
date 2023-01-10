@@ -80,6 +80,12 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
             navController.navigate(route = SoundViewScreens.ImageGenerateDevToolScreen.route)
         }
     }
+    LaunchedEffect(isManual) {
+        if(isManual) {
+
+            navController.navigate(route = SoundViewScreens.ImageChooserScreen.route)
+        }
+    }
     if (allPermissionsState.allPermissionsGranted) {
         Scaffold(
             topBar = {
@@ -263,7 +269,7 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
                                     keyPrompt = "",
                                 )
                                 viewModel.setSong(song)
-                                isFinished = true
+
                                 isManual = true
 
                             }
