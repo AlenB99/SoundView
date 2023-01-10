@@ -4,7 +4,6 @@ import BottomNavBar
 import android.Manifest
 import android.media.MediaRecorder
 import android.os.Build
-import android.text.InputType
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -23,8 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.text.input.KeyboardType.Companion.Text
-import androidx.compose.ui.window.Popup
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import at.ac.tuwien.inso.model.Song
@@ -200,11 +197,11 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
                                             // From python script we get a PyObject, which is converted to a string. Afterwards
                                             // its added to urlList, so that we can select the urls through indexing
                                         } catch (e: JSONException) {
-                                            //println(e.message + " ")
+                                            println(e.message + " ")
                                             error = "Could not find the song. Please try again."
                                             currentRotation = 0f
                                         }catch (e: PyException) {
-                                            //println(e.message + " ")
+                                            println(e.message + " ")
                                             error = "Network Error!"
                                             currentRotation = 0f
                                         }

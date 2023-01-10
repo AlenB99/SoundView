@@ -46,20 +46,21 @@ fun SongHistory(navController: NavController, viewModel: SongViewModel, songs: L
             )
         }, content =
         {
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(it),
+                    .padding(it)
+                    .padding(16.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Lazy Column
                 for (item in songs) {
-                    SongCard(song = item , navController = navController, viewModel = viewModel)
+                        item{
+                            SongCard(song = item , navController = navController, viewModel = viewModel)
+                            Spacer(modifier = Modifier.size(16.dp))
+                        }
+                    }
                 }
-                Spacer(modifier = Modifier.size(32.dp))
-
-            }
         },
         bottomBar = {BottomNavBar(navController = navController)})
 }

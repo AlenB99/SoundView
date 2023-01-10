@@ -47,7 +47,8 @@ fun ImageGeneratorDevTool(navController: NavController, viewModel: SongViewModel
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(it),
+                    .padding(it)
+                    .padding(16.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
