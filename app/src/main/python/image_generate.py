@@ -73,7 +73,7 @@ def nlp_on_lyrics(lyrics):
     keywords = rake_object.run(text)
     keywords_one =keyword_selector(text, keywords, 0)
     keywords_two =keyword_selector(text, keywords, 1)
-    return keywords[0]
+    return str(keywords[0]).split(",")[0].replace("(","")
 
 
 def scan_song(binary_file):
