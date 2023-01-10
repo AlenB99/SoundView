@@ -11,6 +11,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,6 +21,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import at.ac.tuwien.inso.model.Song
 import at.ac.tuwien.inso.ui.components.SongCard
+import at.ac.tuwien.inso.ui.navigation.SoundViewScreens
 import at.ac.tuwien.inso.ui.theme.AppTheme
 import at.ac.tuwien.inso.ui.theme.md_theme_light_primaryContainer
 import at.ac.tuwien.inso.ui.theme.md_theme_light_scrim
@@ -36,9 +39,15 @@ import java.util.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LyricsKeywords(navController: NavController, viewModel: SongViewModel) {
-    var lyrics by remember { mutableStateOf("false") }
-    var keywords by remember { mutableStateOf("false") }
+    var lyrics by remember { mutableStateOf("Loading...") }
+    var keywords by remember { mutableStateOf("") }
+    var isFinished by remember { mutableStateOf(false) }
 
+    LaunchedEffect(isFinished) {
+        if(isFinished) {
+            navController.navigate(route = SoundViewScreens.ImageChooserScreen.route)
+        }
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -75,12 +84,42 @@ fun LyricsKeywords(navController: NavController, viewModel: SongViewModel) {
                         }
                     }
                 }
+
                 Text(text = lyrics)
                 Text(text = keywords)
+                
+                var text = keywords
+                TextField(
+                    value = keywords,
+                    onValueChange = { newText ->
+                        keywords = newText
+                    }
 
+                )
+                Button(
+                    onClick = {
+                        val song = Song(
+                            id = UUID.randomUUID().toString(),
+                            artist = "SoundViewUser",
+                            title = text,
+                            image_1 = "",
+                            image_2 = "",
+                            image_3 = "",
+                            image_4 = "",
+                            keyPrompt = "",
+                        )
+                        viewModel.setSong(song)
+                        isFinished = true
+                        //isManual = true
+
+                    }
+                ) {
+                    Text("Search", color= Color.Black)
+                }
 
             }
         },
+
         bottomBar = {BottomNavBar(navController = navController)})
 }
 

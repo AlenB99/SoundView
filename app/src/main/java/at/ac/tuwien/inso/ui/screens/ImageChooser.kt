@@ -74,17 +74,20 @@ suspend fun getLyrics(py: Python, prompt: String): String {
 suspend fun applyNLP(py: Python, lyrics: String): String {
     val module = py.getModule("image_generate")
     val keywords = "No keywords have been found"
-    try {
+    if (lyrics != "No lyrics have been found" ){
+        try {
 
-        val keywords = module.callAttr("nlp_on_lyrics", lyrics)
-            .toString()
+            val keywords = module.callAttr("nlp_on_lyrics", lyrics)
+                .toString()
 
-        return keywords;
-    } catch (e: PyException) {
+            return keywords;
+        } catch (e: PyException) {
 
+        }
     }
-
     return keywords;
+
+
 }
 
 
