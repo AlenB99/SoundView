@@ -41,7 +41,7 @@ def image_generate(x):
 def get_song_lyrics(x):
     artist_name= x.split("-")[0]
     song_name= x.split("-")[1]
-    API = azapi.AZlyrics("duckduckgo",accuracy=0.5)
+    API = azapi.AZlyrics("duckduckgo",accuracy=0.8)
     API.artist = artist_name
     API.title = song_name
 
@@ -73,7 +73,7 @@ def nlp_on_lyrics(lyrics):
     keywords = rake_object.run(text)
     keywords_one =keyword_selector(text, keywords, 0)
     keywords_two =keyword_selector(text, keywords, 1)
-    return str(keywords[0]).split(",")[0].replace("(","")
+    return str(keywords[0]).split(",")[0].replace("(","").replace("'","")
 
 
 def scan_song(binary_file):
