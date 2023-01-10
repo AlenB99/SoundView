@@ -12,6 +12,7 @@ const val COLUMN_SONG_IMAGE1 = "image1"
 const val COLUMN_SONG_IMAGE2 = "image2"
 const val COLUMN_SONG_IMAGE3 = "image3"
 const val COLUMN_SONG_IMAGE4 = "image4"
+const val COLUMN_SONG_KEYPROMPT = "keyprompt"
 
 
 /**
@@ -43,8 +44,14 @@ data class Song(
 
     @ColumnInfo(name = COLUMN_SONG_IMAGE4)
     var image_4: String,
+
+    @ColumnInfo(name = COLUMN_SONG_KEYPROMPT)
+    var keyPrompt: String
 ) {
+
+
     override fun toString(): String {
-        return "Song(id='$id', title='$title', artist='$artist', image_1='$image_1', image_2='$image_2', image_3='$image_3', image_4='$image_4')"
+        return "Song(id='$id', title='$title', artist='$artist', image_1='$image_1'," +
+                "image_2='$image_2', image_3='$image_3', image_4='$image_4', keyPrompt='$keyPrompt')"
     }
 }

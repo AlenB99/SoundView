@@ -31,12 +31,13 @@ class SongRepository(
     /**
      * Updates an existing [Song].
      */
-    suspend fun update(song: Song, value: List<String>) {
+    suspend fun update(song: Song, value: List<String>, keyPrompt: String) {
         // Initially add it to the database, so no refresh is needed
         song.image_1 = value[0]
         song.image_2 = value[1]
         song.image_3 = value[2]
         song.image_4 = value[3]
+        song.keyPrompt = keyPrompt
         songDao.update(song)
     }
 

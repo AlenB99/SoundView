@@ -78,7 +78,7 @@ fun ImageToStorage(navController: NavController, viewModel: SongViewModel) {
 
                 SongTitle(name = viewModel.song.value!!.title)
                 Artist(name = viewModel.song.value!!.artist)
-                Keywords(name = viewModel.prompt.value.toString())
+                Keywords(name = viewModel.song.value!!.keyPrompt)
 
                 Button(
                     onClick = {

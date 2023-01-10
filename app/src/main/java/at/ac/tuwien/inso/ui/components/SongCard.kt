@@ -40,7 +40,7 @@ fun SongCard(song: Song, navController: NavController, viewModel: SongViewModel)
         border = BorderStroke(2.dp, md_theme_light_outlineVariant),
         colors = CardDefaults.cardColors(containerColor = md_theme_light_primaryContainer),
         onClick = {
-            viewModel.setPrompt(viewModel.song.value!!.title)
+            viewModel.setSong(song)
             navController.navigate(route = SoundViewScreens.ImageChooserScreen.route)
         }
     ) {
@@ -97,7 +97,8 @@ fun PreviewSongCard() {
                 image_1 = "test",
                 image_2 = "test",
                 image_3 = "test",
-                image_4 = "test"
+                image_4 = "test",
+                keyPrompt = ""
             ),
             navController = rememberNavController(),
             viewModel = getViewModel()

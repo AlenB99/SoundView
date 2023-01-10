@@ -95,8 +95,8 @@ class SongViewModel(
         return songs.value.firstOrNull { it.id == id }
     }
 
-    fun updateSong(value: List<String>) {
-        viewModelScope.launch(Dispatchers.IO) { songRepository.update(song.value!!, value) }
+    fun updateSong(value: List<String>, keyPrompt: String) {
+        viewModelScope.launch(Dispatchers.IO) { songRepository.update(song.value!!, value, keyPrompt) }
     }
 
 }

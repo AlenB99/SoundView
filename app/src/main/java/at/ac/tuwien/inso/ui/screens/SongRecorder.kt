@@ -188,6 +188,7 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
                                                 image_2 = "",
                                                 image_3 = "",
                                                 image_4 = "",
+                                                keyPrompt = "",
                                             )
                                             viewModel.insertSong(song)
 
@@ -201,11 +202,9 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
                                             // From python script we get a PyObject, which is converted to a string. Afterwards
                                             // its added to urlList, so that we can select the urls through indexing
                                         } catch (e: JSONException) {
-                                            println(e.message + " ")
                                             error = "Could not find the song. Please try again."
                                             currentRotation = 0f
                                         }catch (e: PyException) {
-                                            println(e.message + " ")
                                             error = "Network Error!"
                                             currentRotation = 0f
                                         }
@@ -261,6 +260,7 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
                                     image_2 = "",
                                     image_3 = "",
                                     image_4 = "",
+                                    keyPrompt = "",
                                 )
                                 viewModel.setSong(song)
                                 isFinished = true
