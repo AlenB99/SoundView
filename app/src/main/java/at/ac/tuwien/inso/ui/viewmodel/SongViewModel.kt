@@ -60,7 +60,7 @@ class SongViewModel(
      * When the database is updated, the view will automatically get notified
      * in the flow [songs].
      */
-    fun refreshSongss() {
+    fun refreshSongs() {
         // Launch I/O operation asynchronously and bind it to the Scope of the ViewModel.
         viewModelScope.launch(Dispatchers.IO) {
             songRepository.refreshSongs()
@@ -93,6 +93,10 @@ class SongViewModel(
      */
     fun getSongById(id: String): Song? {
         return songs.value.firstOrNull { it.id == id }
+    }
+
+    fun updateSong(value: List<String>) {
+        viewModelScope.launch(Dispatchers.IO) { songRepository.update(song.value!!, value) }
     }
 
 }

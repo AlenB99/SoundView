@@ -70,7 +70,7 @@ fun ImageToStorage(navController: NavController, viewModel: SongViewModel) {
                     .padding(5.dp)
                     .clip(RoundedCornerShape(25.dp))
 
-                val image = Image(
+                Image(
                     painter =  rememberAsyncImagePainter(viewModel.imageurl.value),
                     contentDescription = stringResource(id = R.string.app_name),
                     modifier = imageModifier

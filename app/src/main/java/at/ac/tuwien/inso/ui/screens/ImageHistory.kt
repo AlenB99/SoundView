@@ -55,10 +55,13 @@ fun ImageHistory(navController: NavController, viewModel: SongViewModel, songs: 
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 for (item in songs) {
-                    item{
-                        SongCard(song = item , navController = navController, viewModel = viewModel)
-                        Spacer(modifier = Modifier.size(16.dp))
+                    if(item.image_1.isNotEmpty()){
+                        item{
+                            SongCard(song = item , navController = navController, viewModel = viewModel)
+                            Spacer(modifier = Modifier.size(16.dp))
+                        }
                     }
+
                 }
             }
         },

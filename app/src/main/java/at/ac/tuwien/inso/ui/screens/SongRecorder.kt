@@ -183,7 +183,11 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
                                             val song = Song(
                                                 id = randomUUID().toString(),
                                                 artist = jsonObj.get("artist").toString(),
-                                                title = jsonObj.get("title").toString()
+                                                title = jsonObj.get("title").toString(),
+                                                image_1 = "",
+                                                image_2 = "",
+                                                image_3 = "",
+                                                image_4 = "",
                                             )
                                             viewModel.insertSong(song)
 
@@ -251,8 +255,12 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
                             onClick = {
                                 val song = Song(
                                     id = randomUUID().toString(),
-                                    artist = "SoundViewUser".toString(),
-                                    title = text.toString()
+                                    artist = "SoundViewUser",
+                                    title = text,
+                                    image_1 = "",
+                                    image_2 = "",
+                                    image_3 = "",
+                                    image_4 = "",
                                 )
                                 viewModel.setSong(song)
                                 isFinished = true

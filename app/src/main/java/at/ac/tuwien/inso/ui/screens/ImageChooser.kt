@@ -37,162 +37,126 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ImageChooser(navController: NavController, prompt: String, viewModel: SongViewModel) {
-    if (!Python.isStarted()) {
-        Python.start(AndroidPlatform(LocalContext.current))
-    }
-
-    val results = remember { mutableStateOf<List<String>?>(null) }
-    
-    val prompt = (viewModel.song.value?.artist ?: "unknown") + " - " + (viewModel.song.value?.title ?: "unknown")
-    
-
-    if( viewModel.song.value?.artist !="SoundViewUser"){
-            val prompt = (viewModel.song.value?.artist ?: "unknown") + " - " + (viewModel.song.value?.title ?: "unknown")
-            LaunchedEffect(Unit) {
-            CoroutineScope(Dispatchers.IO).launch {
-                val data = withContext(Dispatchers.IO) {
-                    val lyrics = getLyrics(py = Python.getInstance(), prompt = prompt)
-                    val keywords = applyNLP(py = Python.getInstance(), lyrics = lyrics)
-                    viewModel.setKeywords(keywords)
-                    pythonScriptMain(py = Python.getInstance(), prompt = keywords)
-                }
-                results.value = data
-            }
-        }
+    if(viewModel.song.value!!.image_1.isEmpty()){
+        ImageGenerator(navController = navController, prompt = prompt, viewModel = viewModel)
     }else{
-        val prompt = (viewModel.song.value?.title ?: "unknown")
-        LaunchedEffect(Unit) {
-            CoroutineScope(Dispatchers.IO).launch {
-                val data = withContext(Dispatchers.IO) {
-                    pythonScriptMain(py = Python.getInstance(), prompt)
-                }
-                results.value = data
-            }
-        }
+        ImageDisplayer(navController = navController, prompt = prompt, viewModel = viewModel)
     }
-    
-    if (results.value == null) {
-        CircularProgressIndicator(color = Color.Black)
-    } else {
-        viewModel.setImageurls(results.value!!)
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text(text = "Images generated") },
-                    navigationIcon = if (navController.previousBackStackEntry != null) {
-                        {
-                            IconButton(onClick = { navController.navigateUp() }) {
-                                Icon(
-                                    imageVector = Icons.Filled.ArrowBack,
-                                    contentDescription = "Back"
-                                )
-                            }
-                        }
-                    } else {
-                        null
-                    }
-
-                )
-            },
-            content = { padding ->
-                Column(
-                    modifier = Modifier
-                        .padding(padding)
-                        .fillMaxHeight(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ){
-
-                    val imageModifier = Modifier
-                        .size(150.dp)
-                        .padding(5.dp)
-                        .clip(RoundedCornerShape(25.dp))
-                    Row{
-                        SubcomposeAsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(results.value!![0])
-                                .crossfade(true)
-                                .build(),
-                            loading = {
-                                CircularProgressIndicator()
-                            },
-                            contentDescription = stringResource(id = R.string.app_name),
-                            modifier = imageModifier
-                                .clickable(onClick = {
-                                    viewModel.setImageurl(0)
-                                    navController.navigate(route = SoundViewScreens.ImageToStorageScreen.route)
-                                })
-
-                        )
-
-                        SubcomposeAsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(results.value!![1])
-                                .crossfade(true)
-                                .build(),
-                            loading = {
-                                CircularProgressIndicator()
-                            },
-                            contentDescription = stringResource(id = R.string.app_name),
-                            modifier = imageModifier
-                                .clickable(onClick = {
-                                    viewModel.setImageurl(1)
-                                    navController.navigate(route = SoundViewScreens.ImageToStorageScreen.route)
-                                })
-
-                        )
-                    }
-
-                    Row{
-                        SubcomposeAsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(results.value!![2])
-                                .crossfade(true)
-                                .build(),
-                            loading = {
-                                CircularProgressIndicator()
-                            },
-                            contentDescription = stringResource(id = R.string.app_name),
-                            modifier = imageModifier
-                                .clickable(onClick = {
-                                    viewModel.setImageurl(2)
-                                    navController.navigate(route = SoundViewScreens.ImageToStorageScreen.route)
-                                })
-
-                        )
-
-                        SubcomposeAsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(results.value!![3])
-                                .crossfade(true)
-                                .build(),
-                            loading = {
-                                CircularProgressIndicator()
-                            },
-                            contentDescription = stringResource(id = R.string.app_name),
-                            modifier = imageModifier
-                                .clickable(onClick = {
-                                    viewModel.setImageurl(3)
-                                    navController.navigate(route = SoundViewScreens.ImageToStorageScreen.route)
-                                })
-
-                        )
-                    }
-                    Text(text = "Choose one to Download!", style = MaterialTheme.typography.caption)
-                    SongTitle(name = viewModel.song.value!!.title)
-                    Artist(name = viewModel.song.value!!.artist)
-                    Keywords(name = "Keywords: " + viewModel.keywords.value!!)
-                }
-            }
-        )
-
-    }
-
-
-
-
 }
 
+@Composable
+fun ImageDisplayer(navController: NavController, prompt: String, viewModel: SongViewModel) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Images generated") },
+                navigationIcon = if (navController.previousBackStackEntry != null) {
+                    {
+                        IconButton(onClick = { navController.navigateUp() }) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = "Back"
+                            )
+                        }
+                    }
+                } else {
+                    null
+                }
+
+            )
+        },
+        content = { padding ->
+            Column(
+                modifier = Modifier
+                    .padding(padding)
+                    .fillMaxHeight(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+
+                val imageModifier = Modifier
+                    .size(150.dp)
+                    .padding(5.dp)
+                    .clip(RoundedCornerShape(25.dp))
+                Row{
+                    SubcomposeAsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(viewModel.song.value!!.image_1)
+                            .crossfade(true)
+                            .build(),
+                        loading = {
+                            CircularProgressIndicator()
+                        },
+                        contentDescription = stringResource(id = R.string.app_name),
+                        modifier = imageModifier
+                            .clickable(onClick = {
+                                viewModel.setImageurl(0)
+                                navController.navigate(route = SoundViewScreens.ImageToStorageScreen.route)
+                            })
+
+                    )
+
+                    SubcomposeAsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(viewModel.song.value!!.image_2)
+                            .crossfade(true)
+                            .build(),
+                        loading = {
+                            CircularProgressIndicator()
+                        },
+                        contentDescription = stringResource(id = R.string.app_name),
+                        modifier = imageModifier
+                            .clickable(onClick = {
+                                viewModel.setImageurl(1)
+                                navController.navigate(route = SoundViewScreens.ImageToStorageScreen.route)
+                            })
+
+                    )
+                }
+
+                Row{
+                    SubcomposeAsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(viewModel.song.value!!.image_3)
+                            .crossfade(true)
+                            .build(),
+                        loading = {
+                            CircularProgressIndicator()
+                        },
+                        contentDescription = stringResource(id = R.string.app_name),
+                        modifier = imageModifier
+                            .clickable(onClick = {
+                                viewModel.setImageurl(2)
+                                navController.navigate(route = SoundViewScreens.ImageToStorageScreen.route)
+                            })
+
+                    )
+
+                    SubcomposeAsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(viewModel.song.value!!.image_4)
+                            .crossfade(true)
+                            .build(),
+                        loading = {
+                            CircularProgressIndicator()
+                        },
+                        contentDescription = stringResource(id = R.string.app_name),
+                        modifier = imageModifier
+                            .clickable(onClick = {
+                                viewModel.setImageurl(3)
+                                navController.navigate(route = SoundViewScreens.ImageToStorageScreen.route)
+                            })
+
+                    )
+                }
+                Text(text = "Choose one to Download!", style = MaterialTheme.typography.caption)
+                SongTitle(name = viewModel.song.value!!.title)
+                Artist(name = viewModel.song.value!!.artist)
+                Keywords(name = "Keywords: " + viewModel.keywords.value!!)
+            }
+        }
+    )
+}
 
 
 suspend fun pythonScriptMain(py: Python, prompt: String): List<String> {
@@ -247,7 +211,9 @@ suspend fun applyNLP(py: Python, lyrics: String): String {
     println(keywords)
     return keywords;
 }
-@Composable
+
+
+    @Composable
     fun SongTitle(name: String) {
         Text(text = name, style = MaterialTheme.typography.h3)
     }
@@ -259,5 +225,165 @@ suspend fun applyNLP(py: Python, lyrics: String): String {
     fun Keywords(name: String) {
         Text(text = "$name", style = MaterialTheme.typography.caption)
     }
+
+
+    @Composable
+    fun ImageGenerator(navController: NavController, prompt: String, viewModel: SongViewModel)
+    {
+            if (!Python.isStarted()) {
+                Python.start(AndroidPlatform(LocalContext.current))
+            }
+
+            val results = remember { mutableStateOf<List<String>?>(null) }
+
+
+
+            if( viewModel.song.value?.artist !="SoundViewUser"){
+                val prompt = (viewModel.song.value?.artist ?: "unknown") + " - " + (viewModel.song.value?.title ?: "unknown")
+                LaunchedEffect(Unit) {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val data = withContext(Dispatchers.IO) {
+                            val lyrics = getLyrics(py = Python.getInstance(), prompt = prompt)
+                            val keywords = applyNLP(py = Python.getInstance(), lyrics = lyrics)
+                            viewModel.setKeywords(keywords)
+                            pythonScriptMain(py = Python.getInstance(), prompt = keywords)
+                        }
+                        results.value = data
+                    }
+                }
+            }else{
+                val prompt = (viewModel.song.value?.title ?: "unknown")
+                LaunchedEffect(Unit) {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val data = withContext(Dispatchers.IO) {
+                            pythonScriptMain(py = Python.getInstance(), prompt)
+                        }
+                        results.value = data
+                    }
+                }
+            }
+
+            if (results.value == null) {
+                CircularProgressIndicator(color = Color.Black)
+            } else {
+                viewModel.setImageurls(results.value!!)
+                viewModel.updateSong(results.value!!)
+                Scaffold(
+                    topBar = {
+                        TopAppBar(
+                            title = { Text(text = "Images generated") },
+                            navigationIcon = if (navController.previousBackStackEntry != null) {
+                                {
+                                    IconButton(onClick = { navController.navigateUp() }) {
+                                        Icon(
+                                            imageVector = Icons.Filled.ArrowBack,
+                                            contentDescription = "Back"
+                                        )
+                                    }
+                                }
+                            } else {
+                                null
+                            }
+
+                        )
+                    },
+                    content = { padding ->
+                        Column(
+                            modifier = Modifier
+                                .padding(padding)
+                                .fillMaxHeight(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ){
+
+                            val imageModifier = Modifier
+                                .size(150.dp)
+                                .padding(5.dp)
+                                .clip(RoundedCornerShape(25.dp))
+                            Row{
+                                SubcomposeAsyncImage(
+                                    model = ImageRequest.Builder(LocalContext.current)
+                                        .data(results.value!![0])
+                                        .crossfade(true)
+                                        .build(),
+                                    loading = {
+                                        CircularProgressIndicator()
+                                    },
+                                    contentDescription = stringResource(id = R.string.app_name),
+                                    modifier = imageModifier
+                                        .clickable(onClick = {
+                                            viewModel.setImageurl(0)
+                                            navController.navigate(route = SoundViewScreens.ImageToStorageScreen.route)
+                                        })
+
+                                )
+
+                                SubcomposeAsyncImage(
+                                    model = ImageRequest.Builder(LocalContext.current)
+                                        .data(results.value!![1])
+                                        .crossfade(true)
+                                        .build(),
+                                    loading = {
+                                        CircularProgressIndicator()
+                                    },
+                                    contentDescription = stringResource(id = R.string.app_name),
+                                    modifier = imageModifier
+                                        .clickable(onClick = {
+                                            viewModel.setImageurl(1)
+                                            navController.navigate(route = SoundViewScreens.ImageToStorageScreen.route)
+                                        })
+
+                                )
+                            }
+
+                            Row{
+                                SubcomposeAsyncImage(
+                                    model = ImageRequest.Builder(LocalContext.current)
+                                        .data(results.value!![2])
+                                        .crossfade(true)
+                                        .build(),
+                                    loading = {
+                                        CircularProgressIndicator()
+                                    },
+                                    contentDescription = stringResource(id = R.string.app_name),
+                                    modifier = imageModifier
+                                        .clickable(onClick = {
+                                            viewModel.setImageurl(2)
+                                            navController.navigate(route = SoundViewScreens.ImageToStorageScreen.route)
+                                        })
+
+                                )
+
+                                SubcomposeAsyncImage(
+                                    model = ImageRequest.Builder(LocalContext.current)
+                                        .data(results.value!![3])
+                                        .crossfade(true)
+                                        .build(),
+                                    loading = {
+                                        CircularProgressIndicator()
+                                    },
+                                    contentDescription = stringResource(id = R.string.app_name),
+                                    modifier = imageModifier
+                                        .clickable(onClick = {
+                                            viewModel.setImageurl(3)
+                                            navController.navigate(route = SoundViewScreens.ImageToStorageScreen.route)
+                                        })
+
+                                )
+                            }
+                            Text(text = "Choose one to Download!", style = MaterialTheme.typography.caption)
+                            SongTitle(name = viewModel.song.value!!.title)
+                            Artist(name = viewModel.song.value!!.artist)
+                            Keywords(name = "Keywords: " + viewModel.keywords.value!!)
+                        }
+                    }
+                )
+
+            }
+
+
+
+
+        }
 
 

@@ -22,7 +22,7 @@ import at.ac.tuwien.inso.persistance.dao.SongDao
     entities = [
         Song::class
     ],
-    version = 1
+    version = 2
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun songDao(): SongDao

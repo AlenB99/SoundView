@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import at.ac.tuwien.inso.model.Song
 import at.ac.tuwien.inso.model.TABLE_NAME_SONG
 import kotlinx.coroutines.flow.Flow
@@ -58,4 +59,11 @@ interface SongDao {
     """
     )
     suspend fun deleteAll()
+
+    /**
+     * Updates the given [Song] from the database.
+     */
+    @Update
+    suspend fun update(vararg song: Song)
+
 }
