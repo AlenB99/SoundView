@@ -9,7 +9,8 @@ enum class SoundViewScreens(val route: String) {
     ImageGenerateDevToolScreen("imageDev"),
     SoundRecorderScreen("soundRec"),
     SongHistoryScreen("songHistory"),
-    ImageHistoryScreen("imageHistory")
+    ImageHistoryScreen("imageHistory"),
+    LyricsKeywordsScreen("lyricKeywords")
 
 }
 

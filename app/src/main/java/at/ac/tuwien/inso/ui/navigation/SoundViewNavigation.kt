@@ -50,5 +50,12 @@ fun SoundViewNavigation(navHostController: NavHostController, viewModel: SongVie
         composable(SoundViewScreens.ImageHistoryScreen.route) {
             ImageHistory(navController = navHostController, viewModel = viewModel, songs = songs)
         }
+
+        composable(SoundViewScreens.LyricsKeywordsScreen.route) {
+            LyricsKeywords(
+                navController = navHostController,
+                viewModel = viewModel
+            )
+        }
     }
 }

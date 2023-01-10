@@ -41,7 +41,12 @@ fun SongCard(song: Song, navController: NavController, viewModel: SongViewModel)
         colors = CardDefaults.cardColors(containerColor = md_theme_light_primaryContainer),
         onClick = {
             viewModel.setSong(song)
-            navController.navigate(route = SoundViewScreens.ImageChooserScreen.route)
+            if(song.image_1.isNotEmpty()){
+                navController.navigate(route = SoundViewScreens.ImageChooserScreen.route)
+            }else{
+                navController.navigate(route = SoundViewScreens.LyricsKeywordsScreen.route)
+            }
+
         }
     ) {
         Row {
