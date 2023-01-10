@@ -43,6 +43,7 @@ fun LyricsKeywords(navController: NavController, viewModel: SongViewModel) {
     var keywords by remember { mutableStateOf("") }
     var isFinished by remember { mutableStateOf(false) }
     var isManual by remember { mutableStateOf(false) }
+    var isDone by remember { mutableStateOf(false) }
 
     LaunchedEffect(isFinished) {
         if(isFinished) {
@@ -83,9 +84,12 @@ fun LyricsKeywords(navController: NavController, viewModel: SongViewModel) {
                             lyrics = getLyrics(py = Python.getInstance(), prompt = lyricsPrompt)
                             keywords = applyNLP(py = Python.getInstance(), lyrics = lyrics)
                         }
+                        isDone= true
                     }
                 }
-
+                if (isDone == false) {
+                    androidx.compose.material.CircularProgressIndicator(color = Color.Black)
+                }
                 Text(text = lyrics)
                 //Text(text = keywords)
 
