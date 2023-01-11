@@ -11,6 +11,4 @@ enum class SoundViewScreens(val route: String) {
     SongHistoryScreen("songHistory"),
     ImageHistoryScreen("imageHistory"),
     LyricsKeywordsScreen("lyricKeywords")
-
 }
-

@@ -3,19 +3,18 @@
     <string name="navigate_back">Navigate back</string>
     <string name="refresh">Refresh</string>
     <string name="delete">Delete</string>
-    <string name="msg_no_friends">No friends added!</string>
-    <string name="add_friend">Add friend</string>
-    <string name="friend_name">Name</string>
-    <string name="friend_score">Best friend score: %1$d</string>
-    <string name="friend_score_caption">Best friend score</string>
-    <string name="save">Save</string>
-    <string name="friend_updated">Friend updated</string>
-    <string name="friend_added">Friend added</string>
-    <string name="friend_error_name_empty">Name must be set</string>
-
-    <string name="friend_list_title">Best friends</string>
-    <string name="friend_detail_title_new">New friend</string>
-    <string name="friend_detail_title_edit">Edit friend</string>
+    <string name="title_images_generated">Images generated</string>
+    <string name="caption_download">Choose one to Download</string>
+    <string name="title_image_history">Generated Image History</string>
+    <string name="title_song_found">Song found!</string>
+    <string name="title_lyrics_keywords">Lyrics and Keywords</string>
+    <string name="title_cover_art">Cover Art</string>
+    <string name="title_song_history">Scanned Song History</string>
+    <string name="caption_keywords">Keywords: </string>
+    <string name="error_song">Could not find the song. Please try again.</string>
+    <string name="error_network">Network Error!</string>
+    <string name="error_lyrics">No lyrics have been found</string>
+    <string name="error_keywords">No keywords have been found</string>
+    <string name="title_song_search">Song search</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

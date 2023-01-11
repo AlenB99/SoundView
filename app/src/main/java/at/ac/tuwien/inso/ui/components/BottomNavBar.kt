@@ -1,7 +1,8 @@
+package at.ac.tuwien.inso.ui.components
+
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.List
 import androidx.compose.material.icons.rounded.MusicNote
-import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -12,7 +13,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import at.ac.tuwien.inso.ui.navigation.SoundViewScreens
-import at.ac.tuwien.inso.ui.theme.md_theme_light_onPrimaryContainer
 import at.ac.tuwien.inso.ui.theme.md_theme_light_primaryContainer
 
 data class BottomNavItem(
@@ -39,9 +39,8 @@ val bottomNavItems = listOf(
     ),
 )
 
-
 @Composable
-fun BottomNavBar(navController : NavController){
+fun BottomNavBar(navController: NavController) {
     val backStackEntry = navController.currentBackStackEntryAsState()
     NavigationBar(
         containerColor = md_theme_light_primaryContainer,

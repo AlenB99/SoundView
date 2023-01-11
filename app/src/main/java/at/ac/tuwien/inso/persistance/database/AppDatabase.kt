@@ -27,4 +27,3 @@ import at.ac.tuwien.inso.persistance.dao.SongDao
 abstract class AppDatabase : RoomDatabase() {
     abstract fun songDao(): SongDao
 }
-

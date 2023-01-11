@@ -14,7 +14,6 @@ const val COLUMN_SONG_IMAGE3 = "image3"
 const val COLUMN_SONG_IMAGE4 = "image4"
 const val COLUMN_SONG_KEYPROMPT = "keyprompt"
 
-
 /**
  * A data class (POJO) which represents a basic Song.
  *
@@ -49,9 +48,8 @@ data class Song(
     var keyPrompt: String
 ) {
 
-
     override fun toString(): String {
         return "Song(id='$id', title='$title', artist='$artist', image_1='$image_1'," +
-                "image_2='$image_2', image_3='$image_3', image_4='$image_4', keyPrompt='$keyPrompt')"
+            "image_2='$image_2', image_3='$image_3', image_4='$image_4', keyPrompt='$keyPrompt')"
     }
 }

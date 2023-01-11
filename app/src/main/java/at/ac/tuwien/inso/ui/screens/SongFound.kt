@@ -1,8 +1,10 @@
 package at.ac.tuwien.inso.ui.screens
 
-import BottomNavBar
+import at.ac.tuwien.inso.ui.components.BottomNavBar
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.MusicNote
@@ -10,11 +12,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import at.ac.tuwien.inso.R
 import at.ac.tuwien.inso.ui.components.SongCard
 import at.ac.tuwien.inso.ui.theme.AppTheme
 import at.ac.tuwien.inso.ui.theme.md_theme_light_primaryContainer
@@ -27,53 +31,55 @@ import java.util.*
 @Composable
 fun ImageGeneratorDevTool(navController: NavController, viewModel: SongViewModel) {
 
-
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Song found!")
+                    Text(text = stringResource(R.string.title_song_found))
                 },
                 navigationIcon = {
-
                 },
                 colors = TopAppBarDefaults.smallTopAppBarColors(
                     containerColor = md_theme_light_primaryContainer,
                     titleContentColor = md_theme_light_scrim,
                 )
             )
-        }, content =
+        },
+        content =
         {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(it)
+                    .verticalScroll(rememberScrollState())
                     .padding(16.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-               Button(
+                Button(
                     modifier = Modifier.size(125.dp),
                     shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = md_theme_light_primaryContainer,
                         contentColor = md_theme_light_scrim
                     ),
-                    onClick ={
+                    onClick = {
                         navController.navigateUp()
                     },
 
-                    ) {
-                    Icon(Icons.Rounded.MusicNote , contentDescription = "Localized description")
+                ) {
+                    Icon(Icons.Rounded.MusicNote, contentDescription = "Localized description")
                 }
                 Spacer(modifier = Modifier.size(32.dp))
-                SongCard(song = viewModel.song.value!!, navController = navController,
-                    viewModel = viewModel)
+                SongCard(
+                    song = viewModel.song.value!!, navController = navController,
+                    viewModel = viewModel
+                )
             }
         },
-        bottomBar = {BottomNavBar(navController = navController)})
+        bottomBar = { BottomNavBar(navController = navController) }
+    )
 }
-
 
 @Preview(showBackground = true, device = Devices.PIXEL_3A)
 @Composable
@@ -85,5 +91,3 @@ fun PreviewGDT() {
         )
     }
 }
-
-

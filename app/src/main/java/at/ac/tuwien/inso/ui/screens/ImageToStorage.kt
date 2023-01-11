@@ -8,10 +8,13 @@ import android.provider.MediaStore
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,7 +27,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import at.ac.tuwien.inso.R
+import at.ac.tuwien.inso.ui.components.BottomNavBar
 import at.ac.tuwien.inso.ui.theme.AppTheme
+import at.ac.tuwien.inso.ui.theme.md_theme_light_primaryContainer
+import at.ac.tuwien.inso.ui.theme.md_theme_light_scrim
 import at.ac.tuwien.inso.ui.viewmodel.SongViewModel
 import coil.compose.rememberAsyncImagePainter
 import kotlinx.coroutines.CoroutineScope
@@ -35,6 +41,7 @@ import org.koin.androidx.compose.getViewModel
 import java.net.URL
 import java.util.*
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun ImageToStorage(navController: NavController, viewModel: SongViewModel) {
@@ -42,9 +49,15 @@ fun ImageToStorage(navController: NavController, viewModel: SongViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Cover Art") },
-                navigationIcon = if (navController.previousBackStackEntry != null) {
-                    {
+                title = {
+                    Text(text = stringResource(R.string.title_cover_art))
+                },
+                colors = TopAppBarDefaults.smallTopAppBarColors(
+                    containerColor = md_theme_light_primaryContainer,
+                    titleContentColor = md_theme_light_scrim,
+                ),
+                navigationIcon = {
+                    if (navController.previousBackStackEntry != null) {
                         IconButton(onClick = { navController.navigateUp() }) {
                             Icon(
                                 imageVector = Icons.Filled.ArrowBack,
@@ -52,18 +65,20 @@ fun ImageToStorage(navController: NavController, viewModel: SongViewModel) {
                             )
                         }
                     }
-                } else {
-                    null
                 }
 
             )
         },
         content = { padding ->
             Column(
-                modifier = Modifier.padding(padding),
+                modifier = Modifier
+                    .padding(padding)
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxHeight(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
+            ) {
 
                 val imageModifier = Modifier
                     .size(150.dp)
@@ -71,7 +86,7 @@ fun ImageToStorage(navController: NavController, viewModel: SongViewModel) {
                     .clip(RoundedCornerShape(25.dp))
 
                 Image(
-                    painter =  rememberAsyncImagePainter(viewModel.imageurl.value),
+                    painter = rememberAsyncImagePainter(viewModel.imageurl.value),
                     contentDescription = stringResource(id = R.string.app_name),
                     modifier = imageModifier
                 )
@@ -94,8 +109,11 @@ fun ImageToStorage(navController: NavController, viewModel: SongViewModel) {
                                 }
                             val bitmap = BitmapFactory.decodeStream(inputStream)
                             val values = ContentValues().apply {
-                                put(MediaStore.MediaColumns.DISPLAY_NAME, "SoundView_"+ viewModel.song
-                                    .value!!.title + "_" + Date() +".png")
+                                put(
+                                    MediaStore.MediaColumns.DISPLAY_NAME,
+                                    "SoundView_" + viewModel.song
+                                        .value!!.title + "_" + Date() + ".png"
+                                )
                                 put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
                             }
                             val uri = context.contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
@@ -118,7 +136,8 @@ fun ImageToStorage(navController: NavController, viewModel: SongViewModel) {
                     Text("Download")
                 }
             }
-        }
+        },
+        bottomBar = { BottomNavBar(navController = navController) }
     )
 }
 
@@ -133,6 +152,3 @@ fun PreviewItS() {
         )
     }
 }
-
-
-

@@ -3,8 +3,6 @@ package at.ac.tuwien.inso.ui.components
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -26,7 +24,6 @@ import at.ac.tuwien.inso.ui.theme.md_theme_light_outlineVariant
 import at.ac.tuwien.inso.ui.theme.md_theme_light_primaryContainer
 import at.ac.tuwien.inso.ui.viewmodel.SongViewModel
 import coil.compose.SubcomposeAsyncImage
-import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import org.koin.androidx.compose.getViewModel
 
@@ -41,53 +38,52 @@ fun SongCard(song: Song, navController: NavController, viewModel: SongViewModel)
         colors = CardDefaults.cardColors(containerColor = md_theme_light_primaryContainer),
         onClick = {
             viewModel.setSong(song)
-            if(song.image_1.isNotEmpty()){
+            if (song.image_1.isNotEmpty()) {
                 navController.navigate(route = SoundViewScreens.ImageChooserScreen.route)
-            }else{
+            } else {
                 navController.navigate(route = SoundViewScreens.LyricsKeywordsScreen.route)
             }
-
         }
     ) {
         Row {
 
-        if(song.image_1.isNotEmpty()){
-            Column(modifier = Modifier.padding(8.dp)) {
-                SubcomposeAsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(song.image_1)
-                        .crossfade(true)
-                        .build(),
-                    loading = {
-                        CircularProgressIndicator()
-                    },
-                    contentDescription = stringResource(id = R.string.app_name),
-                    modifier = Modifier.clip(RoundedCornerShape(10.dp))
+            if (song.image_1.isNotEmpty()) {
+                Column(modifier = Modifier.padding(8.dp)) {
+                    SubcomposeAsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(song.image_1)
+                            .crossfade(true)
+                            .build(),
+                        loading = {
+                            CircularProgressIndicator()
+                        },
+                        contentDescription = stringResource(id = R.string.app_name),
+                        modifier = Modifier.clip(RoundedCornerShape(10.dp))
+                            .size(64.dp)
 
+                    )
+                }
+            }
+            Column(Modifier.padding(16.dp)) {
+
+                Text(
+                    text = song.title,
+                    style = MaterialTheme.typography.titleMedium,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Spacer(modifier = Modifier.height(5.dp))
+
+                Text(
+                    text = song.artist,
+                    // maxLines = 1,
+                    // overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.titleSmall,
                 )
             }
         }
-        Column(Modifier.padding(16.dp)) {
-
-            Text(
-                text = song.title,
-                style = MaterialTheme.typography.titleMedium,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            Spacer(modifier = Modifier.height(5.dp))
-
-            Text(
-                text = song.artist,
-                //maxLines = 1,
-                //overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.titleSmall,
-            )
-        }
-        }
     }
-
 }
 @RequiresApi(Build.VERSION_CODES.S)
 @Preview
@@ -96,7 +92,7 @@ fun PreviewSongCard() {
     AppTheme {
         SongCard(
             song = Song(
-                id="TEST",
+                id = "TEST",
                 title = "The Fall",
                 artist = "Eminem",
                 image_1 = "test",
@@ -110,5 +106,3 @@ fun PreviewSongCard() {
         )
     }
 }
-
-

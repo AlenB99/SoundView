@@ -65,5 +65,4 @@ interface SongDao {
      */
     @Update
     suspend fun update(vararg song: Song)
-
 }

@@ -1,9 +1,10 @@
 package at.ac.tuwien.inso.ui
 
-
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -13,8 +14,6 @@ import at.ac.tuwien.inso.ui.navigation.SoundViewNavigation
 import at.ac.tuwien.inso.ui.theme.AppTheme
 import at.ac.tuwien.inso.ui.viewmodel.SongViewModel
 import org.koin.androidx.viewmodel.ext.android.getViewModel
-
-
 
 /**
  * This is the central point for the UI of the Application.
@@ -75,14 +74,14 @@ class MainActivity : AppCompatActivity() {
 @ExperimentalComposeUiApi
 class MainActivity : ComponentActivity() {
     lateinit var navController: NavHostController
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
 
             // Inject the ViewModel with koin
-            //val viewModel = getViewModel<GenerateCoverViewModel>()
+            // val viewModel = getViewModel<GenerateCoverViewModel>()
             val viewModel = getViewModel<SongViewModel>()
-
 
             // This sets the correct theming for the Application
             AppTheme {

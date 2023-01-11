@@ -1,6 +1,6 @@
 package at.ac.tuwien.inso.ui.screens
 
-import BottomNavBar
+import at.ac.tuwien.inso.ui.components.BottomNavBar
 import android.Manifest
 import android.media.MediaRecorder
 import android.os.Build
@@ -14,16 +14,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import at.ac.tuwien.inso.R
 import at.ac.tuwien.inso.model.Song
 import at.ac.tuwien.inso.ui.navigation.SoundViewScreens
 import at.ac.tuwien.inso.ui.theme.AppTheme
@@ -44,14 +45,13 @@ import java.io.IOException
 import java.util.*
 import java.util.UUID.randomUUID
 
-
 @OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
     var isRecording by remember { mutableStateOf(false) }
     var isFinished by remember { mutableStateOf(false) }
-    var isManual by remember { mutableStateOf(false) }
+    val isManual by remember { mutableStateOf(false) }
     var error = ""
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -59,7 +59,7 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
 
     // If android API is above 30, there is a bug where storage permissions are not asked.
     // See issue thread for example: https://github.com/xamarin/Essentials/issues/2041
-    var allPermissionsState = if (currentVersion >= Build.VERSION_CODES.R) {
+    val allPermissionsState = if (currentVersion >= Build.VERSION_CODES.R) {
         rememberMultiplePermissionsState(
             listOf(
                 Manifest.permission.RECORD_AUDIO
@@ -75,13 +75,13 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
         )
     }
     LaunchedEffect(isFinished) {
-        if(isFinished) {
+        if (isFinished) {
 
             navController.navigate(route = SoundViewScreens.ImageGenerateDevToolScreen.route)
         }
     }
     LaunchedEffect(isManual) {
-        if(isManual) {
+        if (isManual) {
 
             navController.navigate(route = SoundViewScreens.ImageChooserScreen.route)
         }
@@ -91,17 +91,17 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
             topBar = {
                 TopAppBar(
                     title = {
-                        Text(text = "Song Search")
+                        Text(text = stringResource(R.string.title_song_search))
                     },
                     navigationIcon = {
-
                     },
                     colors = TopAppBarDefaults.smallTopAppBarColors(
                         containerColor = md_theme_light_primaryContainer,
                         titleContentColor = md_theme_light_scrim,
                     )
                 )
-            }, content =
+            },
+            content =
             {
                 Column(
                     modifier = Modifier
@@ -110,40 +110,38 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
                         .background(md_theme_light_primary),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
-                )
-                {
+                ) {
                     var currentRotation by remember { mutableStateOf(0f) }
 
                     val rotation = remember { Animatable(currentRotation) }
-                    LaunchedEffect(isRecording){
+                    LaunchedEffect(isRecording) {
 
-                        if(isRecording){
+                        if (isRecording) {
                             rotation.animateTo(
                                 targetValue = currentRotation + 360f,
                                 animationSpec = infiniteRepeatable(
                                     animation = tween(3000, easing = LinearEasing),
                                     repeatMode = RepeatMode.Restart
                                 )
-                            )
-
-                            {
+                            ) {
                                 currentRotation = value
                             }
-                        }else{
+                        } else {
                             currentRotation = 0f
                         }
-
                     }
                     Button(
-                        modifier= Modifier
+                        modifier = Modifier
                             .size(125.dp)
                             .rotate(currentRotation),
                         shape = CircleShape,
-                        colors = ButtonDefaults.buttonColors(containerColor = md_theme_light_primaryContainer,
-                            contentColor = md_theme_light_scrim),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = md_theme_light_primaryContainer,
+                            contentColor = md_theme_light_scrim
+                        ),
                         onClick = {
                             error = ""
-                            var mediaRecorderx= MediaRecorder()
+                            var mediaRecorderx = MediaRecorder()
                             if (currentVersion >= Build.VERSION_CODES.R) {
                                 mediaRecorderx = MediaRecorder(context)
                             }
@@ -162,7 +160,6 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
                                 try {
                                     prepare()
                                 } catch (_: IOException) {
-
                                 }
 
                                 start()
@@ -170,7 +167,6 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
 
                                 coroutineScope.launch {
                                     withContext(Dispatchers.IO) {
-
 
                                         delay(10000) // Record for 10 seconds
                                         stop()
@@ -198,19 +194,15 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
                                             )
                                             viewModel.insertSong(song)
 
-
-
                                             viewModel.setSong(song)
                                             isFinished = true
-
-
 
                                             // From python script we get a PyObject, which is converted to a string. Afterwards
                                             // its added to urlList, so that we can select the urls through indexing
                                         } catch (e: JSONException) {
                                             error = "Could not find the song. Please try again."
                                             currentRotation = 0f
-                                        }catch (e: PyException) {
+                                        } catch (e: PyException) {
                                             error = "Network Error!"
                                             currentRotation = 0f
                                         }
@@ -218,78 +210,27 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
                                         currentRotation = 0f
                                     }
                                 }
-
-
                             }
-
                         },
                         enabled = !isRecording
                     ) {
-                        Icon(Icons.Rounded.MusicNote , contentDescription = "Localized description")
+                        Icon(Icons.Rounded.MusicNote, contentDescription = "Localized description")
                     }
                     Spacer(modifier = Modifier.size(32.dp))
                     if (isRecording) {
-                        Text("Searching...", color= Color.White)
+                        Text("Searching...", color = Color.White)
                     }
 
-                    Text(error, color= Color.White)
-                    var text by remember { mutableStateOf("") }
-                    var showPopup by remember { mutableStateOf(false) }
-                    Button(
-                        modifier= Modifier
-                            .size(129.dp),
-                        shape = RectangleShape,
-                        colors = ButtonDefaults.buttonColors(containerColor = md_theme_light_primaryContainer,
-                            contentColor = md_theme_light_scrim),
-                        onClick = {
-                            showPopup = true
-
-                        }
-                    ){
-                        Text("Manually enter keywords", color= Color.Black)
-                    }
-                    if (showPopup) {
-                        TextField(
-                            value = text,
-                            onValueChange = { newText ->
-                                text = newText
-                            }
-
-                        )
-                        Button(
-                            onClick = {
-                                val song = Song(
-                                    id = randomUUID().toString(),
-                                    artist = "SoundViewUser",
-                                    title = text,
-                                    image_1 = "",
-                                    image_2 = "",
-                                    image_3 = "",
-                                    image_4 = "",
-                                    keyPrompt = "",
-                                )
-                                viewModel.setSong(song)
-
-                                isManual = true
-
-                            }
-                        ) {
-                            Text("Search", color= Color.Black)
-                        }
-                    }
+                    Text(error, color = Color.White)
                 }
-
-
             },
-            bottomBar = {BottomNavBar(navController = navController)})
-
-
-    }
-    else {
+            bottomBar = { BottomNavBar(navController = navController) }
+        )
+    } else {
         Column {
             val allPermissionsRevoked =
                 allPermissionsState.permissions.size ==
-                        allPermissionsState.revokedPermissions.size
+                    allPermissionsState.revokedPermissions.size
 
             val textToShow = if (!allPermissionsRevoked) {
                 // If not all the permissions are revoked, it's because the user accepted the COARSE
@@ -298,7 +239,7 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
             } else if (allPermissionsState.shouldShowRationale) {
                 // Both location permissions have been denied
                 "Getting your Audio while you record is important for this app. " +
-                        "Please grant us the Audio Record Permissions. Thank you :D"
+                    "Please grant us the Audio Record Permissions. Thank you :D"
             } else {
                 // First time the user sees this feature or the user doesn't want to be asked again
                 "This feature requires Audio and File permission"
@@ -314,12 +255,9 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
             Button(onClick = { allPermissionsState.launchMultiplePermissionRequest() }) {
                 Text(buttonText)
             }
-
         }
     }
 }
-
-
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Preview
@@ -332,4 +270,3 @@ fun PreviewAudioRecorder() {
         )
     }
 }
-

@@ -12,7 +12,6 @@ import androidx.navigation.compose.composable
 import at.ac.tuwien.inso.ui.screens.*
 import at.ac.tuwien.inso.ui.viewmodel.SongViewModel
 
-
 @RequiresApi(Build.VERSION_CODES.S)
 @ExperimentalComposeUiApi
 @Composable
@@ -26,11 +25,10 @@ fun SoundViewNavigation(navHostController: NavHostController, viewModel: SongVie
         startDestination = SoundViewScreens.SoundRecorderScreen.route
     ) {
         composable(SoundViewScreens.ImageChooserScreen.route) {
-        ImageChooser(
-            navController = navHostController,
-            viewModel = viewModel,
-            prompt = viewModel.prompt.value.toString()
-        )
+            ImageChooser(
+                navController = navHostController,
+                viewModel = viewModel,
+            )
         }
 
         composable(SoundViewScreens.ImageToStorageScreen.route) {

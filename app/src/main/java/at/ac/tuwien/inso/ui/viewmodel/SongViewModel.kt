@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import at.ac.tuwien.inso.model.Song
 import at.ac.tuwien.inso.repository.SongRepository
+import com.chaquo.python.PyException
+import com.chaquo.python.Python
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -13,8 +15,7 @@ import kotlinx.coroutines.launch
 
 class SongViewModel(
     private val songRepository: SongRepository
-) : ViewModel()
-{
+) : ViewModel() {
     val songs = songRepository
         .getSongs()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
@@ -23,7 +24,6 @@ class SongViewModel(
     val prompt: LiveData<String> = _prompt
 
     private var _imageurls = MutableLiveData<List<String>>()
-    val imageurls: LiveData<List<String>> = _imageurls
 
     private var _imageurl = MutableLiveData<String>()
     val imageurl: LiveData<String> = _imageurl
@@ -34,9 +34,6 @@ class SongViewModel(
     private var _keywords = MutableLiveData<String>()
     val keywords: LiveData<String> = _keywords
 
-    fun setPrompt(prompt: String) {
-        _prompt.value = prompt
-    }
 
     // PostValue because of the Thread (async)
     fun setImageurls(imageurl: List<String>) {
@@ -44,7 +41,11 @@ class SongViewModel(
     }
 
     fun setImageurl(n: Int) {
-        _imageurl.value = _imageurls.value?.get(n)
+        val imageurltmp = mutableListOf(
+            song.value!!.image_1, song.value!!.image_2,
+            song.value!!.image_3, song.value!!.image_4
+        )
+        _imageurl.value = imageurltmp[n]
     }
 
     fun setSong(song: Song) {
@@ -54,18 +55,7 @@ class SongViewModel(
         _keywords.postValue(keywords)
     }
 
-    /**
-     * Uses the [SongRepository] to update the song list.
-     * This will execute the API request and persist the result to the database.
-     * When the database is updated, the view will automatically get notified
-     * in the flow [songs].
-     */
-    fun refreshSongs() {
-        // Launch I/O operation asynchronously and bind it to the Scope of the ViewModel.
-        viewModelScope.launch(Dispatchers.IO) {
-            songRepository.refreshSongs()
-        }
-    }
+
 
     /**
      * Creates a new [Song] via the repository.
@@ -76,27 +66,18 @@ class SongViewModel(
         viewModelScope.launch(Dispatchers.IO) { songRepository.insert(song) }
     }
 
-    /**
-     * Deletes the given song through the repository.
-     *
-     * @param song The [Song] to delete.
-     */
-    fun deleteSong(song: Song) {
-        viewModelScope.launch(Dispatchers.IO) { songRepository.delete(song) }
-    }
 
-    /**
-     * Loads a single [Song] by its ID.
-     *
-     * @param id The ID of the song.
-     * @return A [Song] if one exists for the given ID. Otherwise null.
-     */
-    fun getSongById(id: String): Song? {
-        return songs.value.firstOrNull { it.id == id }
+    fun pythonScriptMain(py: Python, prompt: String): List<String> {
+        return songRepository.pythonScriptMain(py,prompt)
+    }
+    fun getLyrics(py: Python, prompt: String): String {
+        return songRepository.getLyrics(py,prompt)
+    }
+    fun applyNLP(py: Python, lyrics: String): String {
+        return songRepository.applyNLP(py,lyrics)
     }
 
     fun updateSong(value: List<String>, keyPrompt: String) {
         viewModelScope.launch(Dispatchers.IO) { songRepository.update(song.value!!, value, keyPrompt) }
     }
-
 }
