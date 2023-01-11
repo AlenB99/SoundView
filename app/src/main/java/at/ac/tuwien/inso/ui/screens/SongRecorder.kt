@@ -142,7 +142,7 @@ fun SoundRecorder(navController: NavController, viewModel: SongViewModel) {
                         onClick = {
                             error = ""
                             var mediaRecorderx = MediaRecorder()
-                            if (currentVersion >= Build.VERSION_CODES.R) {
+                            if (currentVersion >= Build.VERSION_CODES.S) {
                                 mediaRecorderx = MediaRecorder(context)
                             }
                             val file = File(context.filesDir.path, "/tmpaudio/")
