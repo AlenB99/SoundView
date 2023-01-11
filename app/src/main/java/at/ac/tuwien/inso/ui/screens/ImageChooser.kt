@@ -69,7 +69,7 @@ fun ImageGenerator(navController: NavController, prompt: String, viewModel: Song
     }
 
     val results = remember { mutableStateOf<List<String>?>(null) }
-
+    var isReady by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             val data = withContext(Dispatchers.IO) {
@@ -185,6 +185,10 @@ fun ImageGenerator(navController: NavController, prompt: String, viewModel: Song
                             loading = {
                                 CircularProgressIndicator()
                             },
+
+                            onSuccess = {
+                                isReady= true
+                            },
                             contentDescription = stringResource(id = R.string.app_name),
                             modifier = imageModifier
                                 .clickable(onClick = {
@@ -194,7 +198,10 @@ fun ImageGenerator(navController: NavController, prompt: String, viewModel: Song
 
                         )
                     }
-                    Text(text = stringResource(R.string.caption_download), style = MaterialTheme.typography.labelMedium)
+                    if (isReady){
+                        Text(text = stringResource(R.string.caption_download), style = MaterialTheme.typography.labelMedium)
+                    }
+
                     SongTitle(name = viewModel.song.value!!.title)
                     Artist(name = viewModel.song.value!!.artist)
                     Keywords(name = stringResource(R.string.caption_keywords) + viewModel.song.value!!.keyPrompt)
