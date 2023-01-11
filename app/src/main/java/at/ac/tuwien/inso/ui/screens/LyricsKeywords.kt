@@ -150,10 +150,10 @@ fun LyricsKeywords(navController: NavController, viewModel: SongViewModel) {
                                 )
                                 viewModel.setSong(song)
                                 isFinished = true
-                                // isManual = true
+
                             }
                         ) {
-                            Text("Generate", color = Color.White)
+                            Text("Go", color = Color.White)
                         }
                     } else {
                         Button(
@@ -173,7 +173,7 @@ fun LyricsKeywords(navController: NavController, viewModel: SongViewModel) {
                                 isFinished = true
                             }
                         ) {
-                            Text("Generate", color = Color.White)
+                            Text("Go", color = Color.White)
                         }
                     }
                 }
