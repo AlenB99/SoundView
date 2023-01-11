@@ -24,7 +24,7 @@ stopwords = ['i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves',
                 'needn', "needn't", 'shan', "shan't", 'shouldn', "shouldn't", 'wasn', "wasn't",
                  'weren', "weren't", 'won', "won't", 'wouldn', "wouldn't"]
 def image_generate(x):
-    openai.api_key = "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"
+    openai.api_key = "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"
     response = openai.Image.create(
         prompt=str(x),
         n=4,
