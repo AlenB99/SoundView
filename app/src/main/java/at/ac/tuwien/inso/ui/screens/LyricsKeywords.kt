@@ -146,7 +146,7 @@ fun LyricsKeywords(navController: NavController, viewModel: SongViewModel) {
                                     image_2 = "",
                                     image_3 = "",
                                     image_4 = "",
-                                    keyPrompt = "",
+                                    keyPrompt = keywords,
                                 )
                                 viewModel.setSong(song)
                                 isFinished = true
