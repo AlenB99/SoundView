@@ -66,7 +66,7 @@ class SongViewModel(
         viewModelScope.launch(Dispatchers.IO) { songRepository.insert(song) }
     }
 
-
+    // Functions that link the python methods
     fun pythonScriptMain(py: Python, prompt: String): List<String> {
         return songRepository.pythonScriptMain(py,prompt)
     }
