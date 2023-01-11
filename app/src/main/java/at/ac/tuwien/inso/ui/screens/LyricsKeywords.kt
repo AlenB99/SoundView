@@ -99,6 +99,7 @@ fun LyricsKeywords(navController: NavController, viewModel: SongViewModel) {
                 }
                 if (!isDone) {
                     androidx.compose.material.CircularProgressIndicator(color = Color.Black)
+
                 }
                 androidx.compose.material3.Text(
                     text = viewModel.song.value!!.title,
@@ -121,60 +122,63 @@ fun LyricsKeywords(navController: NavController, viewModel: SongViewModel) {
         },
 
         bottomBar = {
-            Row {
-                val initialKeywords = keywords
-                TextField(
-                    value = keywords,
-                    onValueChange = { newText ->
-                        keywords = newText
-                        if (keywords != initialKeywords) {
-                            isManual = true
+            if (isDone) {
+                Row {
+                    val initialKeywords = keywords
+                    TextField(
+                        value = keywords,
+                        onValueChange = { newText ->
+                            keywords = newText
+                            if (keywords != initialKeywords) {
+                                isManual = true
+                            }
                         }
-                    }
 
-                )
-                if (isManual) {
-                    Button(
-                        onClick = {
-                            val song = Song(
-                                id = UUID.randomUUID().toString(),
-                                artist = "SoundViewUser",
-                                title = keywords,
-                                image_1 = "",
-                                image_2 = "",
-                                image_3 = "",
-                                image_4 = "",
-                                keyPrompt = "",
-                            )
-                            viewModel.setSong(song)
-                            isFinished = true
-                            // isManual = true
+                    )
+                    if (isManual) {
+                        Button(
+                            onClick = {
+                                val song = Song(
+                                    id = UUID.randomUUID().toString(),
+                                    artist = "SoundViewUser",
+                                    title = keywords,
+                                    image_1 = "",
+                                    image_2 = "",
+                                    image_3 = "",
+                                    image_4 = "",
+                                    keyPrompt = "",
+                                )
+                                viewModel.setSong(song)
+                                isFinished = true
+                                // isManual = true
+                            }
+                        ) {
+                            Text("Generate", color = Color.White)
                         }
-                    ) {
-                        Text("Generate", color = Color.White)
-                    }
-                } else {
-                    Button(
-                        onClick = {
-                            Song(
-                                id = UUID.randomUUID().toString(),
-                                artist = viewModel.song.value?.artist.toString(),
-                                title = viewModel.song.value?.title.toString(),
-                                image_1 = "",
-                                image_2 = "",
-                                image_3 = "",
-                                image_4 = "",
-                                keyPrompt = viewModel.keywords.value.toString(),
-                            )
-                            viewModel.updateSong(emptyList(), viewModel.keywords.value.toString())
+                    } else {
+                        Button(
+                            onClick = {
+                                Song(
+                                    id = UUID.randomUUID().toString(),
+                                    artist = viewModel.song.value?.artist.toString(),
+                                    title = viewModel.song.value?.title.toString(),
+                                    image_1 = "",
+                                    image_2 = "",
+                                    image_3 = "",
+                                    image_4 = "",
+                                    keyPrompt = viewModel.keywords.value.toString(),
+                                )
+                                viewModel.updateSong(emptyList(), viewModel.keywords.value.toString())
 
-                            isFinished = true
+                                isFinished = true
+                            }
+                        ) {
+                            Text("Generate", color = Color.White)
                         }
-                    ) {
-                        Text("Generate", color = Color.White)
                     }
                 }
             }
+
         }
     )
 }
