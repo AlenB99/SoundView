@@ -83,7 +83,7 @@ def nlp_on_lyrics(lyrics):
 #Sends a binary file to the AudD API to detect the song name
 def scan_song(binary_file):
     data = {
-    'api_token': '473250a810b7ccb9cebbdf14d399e915', #valid until 21st of January
+    'api_token': 'b8c99583953c46181a58bb7de6f02981', #valid until 21st of January
     'return': 'apple_music,spotify'
     }
     btfile = bytes(binary_file)
