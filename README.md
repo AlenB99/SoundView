@@ -45,12 +45,7 @@ Additionally, the user will also be able to view a history of the generated imag
 <br />
 
 ### Screenshots 
-![main](doc\main.jpg)
-![found](doc\found.jpg)
-![lyrics](doc\lyrics.jpg)
-![results](doc\results.jpg)
 ![choose](choose.jpg)
-![history](doc\history.jpg)
 ## Authors in Alphabetic Order
 
 * Alen Bisanovic 
